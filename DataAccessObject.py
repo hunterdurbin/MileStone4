@@ -2,6 +2,8 @@ from mysqlutils import SQL_runner
 import json
 import re
 
+#NoahConn Test Push
+
 
 # Move these to own module
 def extract_type(json_data):
@@ -62,12 +64,12 @@ class MySQL_DAO:
         :return dict:
         """
         query = """
-                SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude 
-                FROM Vessel, AIS_Message, Position_Report 
-                WHERE Vessel.IMO=AIS_Message.Vessel_IMO 
-                AND AIS_Message.Id=Position_Report.AISMessage_Id 
-                AND AIS_Message.MMSI={} 
-                ORDER BY Timestamp DESC 
+                SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude
+                FROM Vessel, AIS_Message, Position_Report
+                WHERE Vessel.IMO=AIS_Message.Vessel_IMO
+                AND AIS_Message.Id=Position_Report.AISMessage_Id
+                AND AIS_Message.MMSI={}
+                ORDER BY Timestamp DESC
                 LIMIT 5;
                 """ \
             .format(mmsi)
@@ -87,12 +89,12 @@ class MySQL_DAO:
         :return:
         """
         query = """
-                SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude 
-                FROM Vessel, AIS_Message, Position_Report 
-                WHERE Vessel.IMO=AIS_Message.Vessel_IMO 
-                AND AIS_Message.Id=Position_Report.AISMessage_Id 
-                and AIS_Message.MMSI={} 
-                ORDER BY Timestamp DESC 
+                SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude
+                FROM Vessel, AIS_Message, Position_Report
+                WHERE Vessel.IMO=AIS_Message.Vessel_IMO
+                AND AIS_Message.Id=Position_Report.AISMessage_Id
+                and AIS_Message.MMSI={}
+                ORDER BY Timestamp DESC
                 LIMIT 1;
                 """ \
             .format(mmsi)
