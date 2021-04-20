@@ -2,7 +2,7 @@
 
 Installation setup (Windows):
 
-Setup the Database: Get-Content AISTestDataTables.mysql | mysql -u USER -p --password=PASSWORD
+Setup the Database: Get-Content AISTestDataCreateTables.mysql | mysql -u USER -p --password=PASSWORD
 
 Download the AISTestData_dump.mysql
 
