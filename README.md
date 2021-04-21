@@ -25,7 +25,7 @@ Or just download and move to the directory wherever you saved the file, and then
     
     >MAC<br/>
     $ mysql -u \<user> -p --password=\<password> < AISTestData_dump.mysql
-    Download the AISTestData_dump.mysql
+
 
 
 
