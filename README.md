@@ -4,8 +4,7 @@
 
 Run the quickInstallDatabase.py for quick install.<br/>
 
-    Note: You will need to download the 'AISTestData_dump.mysql' file<br/>
-    and place it in the 'data/sql' directory.
+    You will need to download the 'AISTestData_dump.mysql' file and place it in the 'data/sql' directory.
 
 OR, install the database manually:
 
