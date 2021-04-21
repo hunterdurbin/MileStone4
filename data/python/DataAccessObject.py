@@ -106,7 +106,7 @@ class MySQL_DAO:
             'long': str(docs[2]),
             'IMO': docs[0]
         }
-        return docs
+        return json.dumps(docs)
 
     @staticmethod
     def read_all_ship_positions_from_port(port_id):
@@ -143,8 +143,6 @@ class MySQL_DAO:
         pass
 
 
-# print(MySQL_DAO.read_last_5_ship_positions_from_mmsi(230631000))
-# print(MySQL_DAO.read_ship_current_position_from_mmsi(230631000))
 MySQL_DAO.insert_msg(
     '{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,"MsgType":"position_report","Position":{"type":"Point","coordinates":[55.218332,13.371672]},"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}'
     )
