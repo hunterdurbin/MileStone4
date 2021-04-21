@@ -24,6 +24,10 @@ class Installer:
         self.mysql_username = None
 
     def run(self):
+        if self.os_type == OSType.NOT_FOUND:
+            print("Can not quick install for OS:{}\n"
+                  "Refer to the README.md on how to install the database.".format(os.name))
+
         self.mysql_username = self.get_username()
         cmd_create = self.get_create_table_cmd()
         cmd_populate = self.get_populate_table_cmd() if cmd_create else None
