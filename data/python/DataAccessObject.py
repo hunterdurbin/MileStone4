@@ -32,6 +32,13 @@ class MySQL_DAO:
 
     @staticmethod
     def insert_msg(json_data):
+        """
+        Insert an AIS message (Position Report or Static Data).
+
+        :param json_data: A single json string of a message to insert
+        :returns: 1/0 for success/failure upon message insertion.
+        :return type: json
+        """
         # TODO: find out a way to insert the damn data
 
         msg_type = extract_type(json_data)
@@ -43,14 +50,35 @@ class MySQL_DAO:
 
     @staticmethod
     def insert_msg_batch(json_data: list):
+        """
+        Insert a batch of AIS messages (Static Data and/or Position Reports).
+
+        :param json_data: A list of json string AIS messages to insert
+        :returns: Number of insertions made.
+        :return type: json
+        """
         pass
 
     @staticmethod
     def delete_msgs_older_5min(current_timestamp):
+        """
+        Delete all AIS messages whose timestamp is more than 5 minutes older than current time.
+
+        :param current_timestamp:
+        :returns: Number of deleted AIS messages.
+        :return type: json
+        """
         pass
 
     @staticmethod
     def read_all_ship_positions_from_tile(tile_id):
+        """
+        Read all ship positions in the given tile.
+
+        :param tile_id:
+        :returns: Array of ship documents in a json string.
+        :return type: json
+        """
         query = """NOT IMPLEMENTED"""
         result = SQL_runner().run(query)
         pass
@@ -58,10 +86,11 @@ class MySQL_DAO:
     @staticmethod
     def read_last_5_ship_positions_from_mmsi(mmsi: int):
         """
-        Read last 5 positions of given MMSI
+        Read last 5 positions of given MMSI.
 
         :param mmsi: A ship's mmsi
-        :return json: json string of the most recent 5 positions based off a ship's given mmsi
+        :returns: Document of the form {MMSI: ..., Positions: [{"lat": ..., "long": ...}, "IMO": ... ]}.
+        :return type: json
         """
         query = """
                 SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude
@@ -83,10 +112,11 @@ class MySQL_DAO:
     @staticmethod
     def read_ship_current_position_from_mmsi(mmsi: int):
         """
-        Read current position of given MMSI
+        Read current position of given MMSI.
 
         :param mmsi: A ship's mmsi
-        :return json: json string of the most recent position based off the ship's given mmsi
+        :returns: Position document of the form {"MMSI": ..., "lat": ..., "long": ..., "IMO": ... }.
+        :return type: json
         """
         query = """
                 SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude
@@ -111,35 +141,88 @@ class MySQL_DAO:
     @staticmethod
     def read_all_ship_positions_from_port(port_id: int):
         """
-        Read all positions of ships headed to port with given Id
+        Read all positions of ships headed to port with given Id.
 
         :param port_id:
-        :return:
+        :return: Array of position documents of the form {"MMSI": ..., "lat": ..., "long": ..., "IMO": ...}.
+        :return type: json
         """
         pass
 
     @staticmethod
     def read_all_ships_headed_to_port(port_name: str, country: str):
+        """
+        Read all positions of ships headed to given port (as read from static data, or user input).
+
+        :param port_name:
+        :param country:
+        :returns: If unique matching port: array of of Position documents of the form
+                    {"MMSI": ..., "lat": ..., "long": ..., "IMO": ...}.
+                    Otherwise: an Array of Port documents.
+        :return type:
+        """
         pass
 
     @staticmethod
     def read_all_ports_from_name(port_name: str, country=None):
+        """
+        Read all ports matching the given name and (optional) country.
+
+        :param port_name:
+        :param country:
+        :returns: Array of Port documents.
+        :return type: json
+        """
         pass
 
     @staticmethod
     def read_all_ship_positions_from_tile_scale3(port_name: str, country: str):
+        """
+        Read all ship positions in the tile of scale 3 containing the given port.
+
+        :param port_name:
+        :param country:
+        :returns: If unique matching port: Array of Position documents (see above).
+                    Otherwise: an Array of Port documents.
+        :return type: json
+        """
         pass
 
     @staticmethod
     def read_vessel_information(mmsi: int, imo=None, name=None, call_sign=None):
+        """
+        Read permanent or transient vessel information matching the given MMSI, and 0 or more additional criteria:
+        IMO, Name, CallSign.
+
+        :param mmsi:
+        :param imo:
+        :param name:
+        :param call_sign:
+        :returns: a Vessel document, with available and/or relevant properties.
+        :return type: json
+        """
         pass
 
     @staticmethod
     def find_sub_map_tiles(tile_id: int):
+        """
+        Given a background map tile for zoom level 1 (2), find the 4 tiles of zoom level 2 (3) that are contained in it.
+
+        :param tile_id:
+        :returns: Array of map tile description documents.
+        :return type: json
+        """
         pass
 
     @staticmethod
     def get_tile_png(tile_id: int):
+        """
+        Given a tile Id, get the actual tile (a PNG file).
+
+        :param tile_id:
+        :returns: binary data for the PNG file for the tile_id.
+        :return type: json
+        """
         pass
 
 
