@@ -56,12 +56,12 @@ class MySQL_DAO:
         pass
 
     @staticmethod
-    def read_last_5_ship_positions_from_mmsi(mmsi):
+    def read_last_5_ship_positions_from_mmsi(mmsi: int):
         """
         Read last 5 positions of given MMSI
 
         :param mmsi: A ship's mmsi
-        :return dict:
+        :return json: json string of the most recent 5 positions based off a ship's given mmsi
         """
         query = """
                 SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude
@@ -81,12 +81,12 @@ class MySQL_DAO:
         return json.dumps(docs)
 
     @staticmethod
-    def read_ship_current_position_from_mmsi(mmsi):
+    def read_ship_current_position_from_mmsi(mmsi: int):
         """
         Read current position of given MMSI
 
-        :param mmsi:
-        :return:
+        :param mmsi: A ship's mmsi
+        :return json: json string of the most recent position based off the ship's given mmsi
         """
         query = """
                 SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude
@@ -109,7 +109,7 @@ class MySQL_DAO:
         return json.dumps(docs)
 
     @staticmethod
-    def read_all_ship_positions_from_port(port_id):
+    def read_all_ship_positions_from_port(port_id: int):
         """
         Read all positions of ships headed to port with given Id
 
@@ -119,27 +119,27 @@ class MySQL_DAO:
         pass
 
     @staticmethod
-    def read_all_ships_headed_to_port(port_name, country):
+    def read_all_ships_headed_to_port(port_name: str, country: str):
         pass
 
     @staticmethod
-    def read_all_ports_from_name(port_name, country=None):
+    def read_all_ports_from_name(port_name: str, country=None):
         pass
 
     @staticmethod
-    def read_all_ship_positions_from_tile_scale3(port_name, country):
+    def read_all_ship_positions_from_tile_scale3(port_name: str, country: str):
         pass
 
     @staticmethod
-    def read_vessel_information(mmsi, imo=None, name=None, call_sign=None):
+    def read_vessel_information(mmsi: int, imo=None, name=None, call_sign=None):
         pass
 
     @staticmethod
-    def find_sub_map_tiles(tile_id):
+    def find_sub_map_tiles(tile_id: int):
         pass
 
     @staticmethod
-    def get_tile_png(tile_id):
+    def get_tile_png(tile_id: int):
         pass
 
 
