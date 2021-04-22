@@ -31,8 +31,10 @@ def extract_pos_report(json_data):
 
 class MySQL_DAO:
 
-    @staticmethod
-    def insert_msg(json_data):
+    def __init__(self, stub=False):
+        self.is_stub = stub
+
+    def insert_msg(self, json_data):
         """
         Insert an AIS message (Position Report or Static Data).
 
@@ -49,8 +51,7 @@ class MySQL_DAO:
             pass
         return 0
 
-    @staticmethod
-    def insert_msg_batch(json_data: list):
+    def insert_msg_batch(self, json_data: list):
         """
         Insert a batch of AIS messages (Static Data and/or Position Reports).
 
@@ -60,8 +61,7 @@ class MySQL_DAO:
         """
         pass
 
-    @staticmethod
-    def delete_msgs_older_5min(current_timestamp):
+    def delete_msgs_older_5min(self, current_timestamp):
         """
         Delete all AIS messages whose timestamp is more than 5 minutes older than current time.
 
@@ -71,8 +71,7 @@ class MySQL_DAO:
         """
         pass
 
-    @staticmethod
-    def read_all_ship_positions_from_tile(tile_id):
+    def read_all_ship_positions_from_tile(self, tile_id):
         """
         Read all ship positions in the given tile.
 
@@ -84,8 +83,7 @@ class MySQL_DAO:
         result = SQL_runner().run(query)
         pass
 
-    @staticmethod
-    def read_last_5_ship_positions_from_mmsi(mmsi: int):
+    def read_last_5_ship_positions_from_mmsi(self, mmsi: int):
         """
         Read last 5 positions of given MMSI.
 
@@ -110,8 +108,7 @@ class MySQL_DAO:
         docs = encode_multiple_pos(mmsi, positions, imo)
         return docs
 
-    @staticmethod
-    def read_ship_current_position_from_mmsi(mmsi: int):
+    def read_ship_current_position_from_mmsi(self, mmsi: int):
         """
         Read current position of given MMSI.
 
@@ -135,8 +132,7 @@ class MySQL_DAO:
         docs = encode_pos(mmsi, [lat, long_], imo)
         return docs
 
-    @staticmethod
-    def read_all_ship_positions_from_port(port_id: int):
+    def read_all_ship_positions_from_port(self, port_id: int):
         """
         Read all positions of ships headed to port with given Id.
 
@@ -146,8 +142,7 @@ class MySQL_DAO:
         """
         pass
 
-    @staticmethod
-    def read_all_ships_headed_to_port(port_name: str, country: str):
+    def read_all_ships_headed_to_port(self, port_name: str, country: str):
         """
         Read all positions of ships headed to given port (as read from static data, or user input).
 
@@ -160,8 +155,7 @@ class MySQL_DAO:
         """
         pass
 
-    @staticmethod
-    def read_all_ports_from_name(port_name: str, country=None):
+    def read_all_ports_from_name(self, port_name: str, country=None):
         """
         Read all ports matching the given name and (optional) country.
 
@@ -172,8 +166,7 @@ class MySQL_DAO:
         """
         pass
 
-    @staticmethod
-    def read_all_ship_positions_from_tile_scale3(port_name: str, country: str):
+    def read_all_ship_positions_from_tile_scale3(self, port_name: str, country: str):
         """
         Read all ship positions in the tile of scale 3 containing the given port.
 
@@ -185,8 +178,7 @@ class MySQL_DAO:
         """
         pass
 
-    @staticmethod
-    def read_vessel_information(mmsi: int, imo=None, name=None, call_sign=None):
+    def read_vessel_information(self, mmsi: int, imo=None, name=None, call_sign=None):
         """
         Read permanent or transient vessel information matching the given MMSI, and 0 or more additional criteria:
         IMO, Name, CallSign.
@@ -200,8 +192,7 @@ class MySQL_DAO:
         """
         pass
 
-    @staticmethod
-    def find_sub_map_tiles(tile_id: int):
+    def find_sub_map_tiles(self, tile_id: int):
         """
         Given a background map tile for zoom level 1 (2), find the 4 tiles of zoom level 2 (3) that are contained in it.
 
@@ -211,8 +202,7 @@ class MySQL_DAO:
         """
         pass
 
-    @staticmethod
-    def get_tile_png(tile_id: int):
+    def get_tile_png(self, tile_id: int):
         """
         Given a tile Id, get the actual tile (a PNG file).
 
@@ -223,6 +213,6 @@ class MySQL_DAO:
         pass
 
 
-MySQL_DAO.insert_msg(
-    '{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,"MsgType":"position_report","Position":{"type":"Point","coordinates":[55.218332,13.371672]},"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}'
-    )
+# MySQL_DAO().insert_msg(
+#     '{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,"MsgType":"position_report","Position":{"type":"Point","coordinates":[55.218332,13.371672]},"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}'
+#     )

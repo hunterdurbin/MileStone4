@@ -4,8 +4,19 @@ from data.python.Encoder import *
 import json
 
 
+# TODO: test here to see if the correct parameters are defined
+# Think of making an abstract class in Java that GUARANTEES our functions are here
+# We want to cut the dependency from the database when checking the function
 class DAO_Methods_UnitTest(unittest.TestCase):
-    DAO = MySQL_DAO()
+    DAO: MySQL_DAO = None
+
+    @classmethod
+    def setUpClass(cls):
+        DAO_UnitTest.DAO = MySQL_DAO(True)
+
+    @classmethod
+    def tearDownClass(cls):
+        DAO_UnitTest.DAO = None
 
 
 class DAO_UnitTest(unittest.TestCase):
