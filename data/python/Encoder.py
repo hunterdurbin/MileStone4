@@ -1,15 +1,5 @@
 import json
-
-
-def encode_json(**kwargs):
-    """
-    Take in any number of key arguments and return a json string
-
-    :param **kwargs: Any number of key arguments
-    :returns: document containing the kwargs
-    :return type: json
-    """
-    return json.dumps(encode(**kwargs))
+from decimal import Decimal
 
 
 def encode(**kwargs):
@@ -18,68 +8,51 @@ def encode(**kwargs):
 
     :param **kwargs: Any number of key arguments
     :returns: document containing the kwargs
-    :return type: dict
+    :return type: json
     """
-    _dict = dict()
-    for item, value in kwargs.items():
-        _dict[item] = value
-    return _dict
+    return json.dumps(kwargs, default=default)
 
 
-def encode_batch_dict(batch, *args):
+def encode_multiple_pos(mmsi, positions, imo):
     """
-    Encodes a batch of identical structured iterables. Uses args to map each value to the iterable value.
-    e.g.
-    encode_batch([[10, 20], [40, 60]], 'foo', 'bar') -> [{'foo': 10, 'bar': 20}, {'foo': 40, 'bar': 60}]
-    encode_batch([[10], [40]], 'foo') -> [{'foo': 10}, {'foo': 40}]
+    Encode a document in the form of {MMSI: ..., Positions: [{"lat": ..., "long": ...}], "IMO": ... }
 
-    :param batch: Arrays or Tuples of identical size
-    :param args: any number of string arguments wanting to map for each iterable in the batch
-    :returns: array containing documents of identical structure
-    :return type: array
+    :param mmsi: (int) - A ship's mmsi
+    :param positions: (list) - A list containing lists of position reports. Each list should be the form of [lat, long]
+    :param imo: a ship's imo
+    :returns: A document
+    :return type: json
     """
-    size = len(batch[0])
-
-    result = []
-    for _list in batch:
-        if size != len(_list):
-            raise Exception('Batch sizes of the arrays are not equal')
-
-        result.append(encode(**dict(zip((arg for arg in args), _list))))
-
-    return result
+    result = {
+        'MMSI': mmsi,
+        'Positions': [],
+        'IMO': imo
+    }
+    for position_report in positions:
+        result['Positions'].append({'lat': position_report[0], 'long': position_report[1]})
+    return json.dumps(result, default=default)
 
 
+def encode_pos(mmsi, position, imo):
+    """
+    Encode a document in the form of {MMSI: ..., Positions: [{"lat": ..., "long": ...}], "IMO": ... }
+
+    :param mmsi: (int) - A ship's mmsi
+    :param position: A list containing a position report. Should be the form of [imo, lat, long]
+    :param imo: a ship's imo
+    :returns: A document
+    :return type: json
+    """
+    result = {
+        'MMSI': mmsi,
+        'lat': position[0],
+        'long': position[1],
+        'IMO': imo
+    }
+    return json.dumps(result, default=default)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def default(o):
+    if isinstance(o, Decimal):
+        return str(o)
+    raise TypeError("Object of type {} is not JSON serializable".format(type(o).__name__))

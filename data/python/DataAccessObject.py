@@ -1,5 +1,5 @@
 from data.python.mysqlutils import SQL_runner
-from data.python.Encoder import encode, encode_batch_dict, encode_json
+from data.python.Encoder import *
 import json
 
 
@@ -104,13 +104,11 @@ class MySQL_DAO:
                 """ \
             .format(mmsi)
         result = SQL_runner().run(query)
+        imo = result[0][0]
+        positions = [[pos[1], pos[2]] for pos in result]
 
-        # TODO: fix encoders to make this section prettier, and to have the decoders dynamically work with any docs
-        # Problem is the Decimal object not serializable when json.dumps
-        docs = {'MMSI': mmsi, 'Positions': []}
-        for report in result:
-            docs['Positions'].append({'lat': str(report[1]), 'long': str(report[2]), 'IMO': report[0]})
-        return json.dumps(docs)
+        docs = encode_multiple_pos(mmsi, positions, imo)
+        return docs
 
     @staticmethod
     def read_ship_current_position_from_mmsi(mmsi: int):
@@ -131,15 +129,11 @@ class MySQL_DAO:
                 LIMIT 1;
                 """ \
             .format(mmsi)
-        docs = SQL_runner().run(query)[0]
+        result = SQL_runner().run(query)[0]
+        imo, lat, long_ = result[0], result[1], result[2]
 
-        docs = {
-            'MMSI': mmsi,
-            'lat': str(docs[1]),
-            'long': str(docs[2]),
-            'IMO': docs[0]
-        }
-        return json.dumps(docs)
+        docs = encode_pos(mmsi, [lat, long_], imo)
+        return docs
 
     @staticmethod
     def read_all_ship_positions_from_port(port_id: int):

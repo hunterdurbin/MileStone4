@@ -1,6 +1,6 @@
 import unittest
 from data.python.DataAccessObject import MySQL_DAO
-from data.python.Encoder import encode, encode_batch_dict, encode_json
+from data.python.Encoder import *
 import json
 
 
@@ -37,12 +37,13 @@ class DAO_UnitTest(unittest.TestCase):
             {"MMSI": 230631000,
              "Positions":
                  [
-                     {"lat": "54.749385", "long": "12.841955", "IMO": 9468920},
-                     {"lat": "54.749220", "long": "12.841198", "IMO": 9468920},
-                     {"lat": "54.749025", "long": "12.840288", "IMO": 9468920},
-                     {"lat": "54.748793", "long": "12.839228", "IMO": 9468920},
-                     {"lat": "54.748630", "long": "12.838472", "IMO": 9468920}
-                 ]
+                     {"lat": "54.749385", "long": "12.841955"},
+                     {"lat": "54.749220", "long": "12.841198"},
+                     {"lat": "54.749025", "long": "12.840288"},
+                     {"lat": "54.748793", "long": "12.839228"},
+                     {"lat": "54.748630", "long": "12.838472"}
+                 ],
+             "IMO": 9468920
              }
         )
         json.dumps(expected)
@@ -92,40 +93,42 @@ class Encoder_UnitTest(unittest.TestCase):
     def tearDownClass(cls):
         pass
 
-    def test_encode_json(self):
-        actual = encode_json(MMSI=123456789, Positions=[])
+    def test_encode(self):
+        actual = encode(MMSI=123456789, Positions=[])
         expected = json.dumps(
             {
-                'MMSI': 123456789,
-                'Positions': []
+            "MMSI": 123456789,
+            "Positions": []
+            }
+        )
+
+        self.assertEqual(expected, actual)
+
+    def test_encode_multiple_pos(self):
+        actual = encode_multiple_pos(mmsi=902134356, positions=[[42.2141, 23.412], [41.9523, 51.124]], imo=93120)
+        expected = json.dumps(
+            {
+                'MMSI': 902134356,
+                'Positions': [
+                    {'lat': 42.2141, 'long': 23.412},
+                    {'lat': 41.9523, 'long': 51.124}
+                ],
+                'IMO': 93120
             }
         )
         self.assertEqual(expected, actual)
 
-    def test_encode(self):
-        actual = encode(MMSI=123456789, Positions=[])
-        expected = {
-            'MMSI': 123456789,
-            'Positions': []
+    def test_encode_pos(self):
+        actual = encode_pos(mmsi=902134356, position=[42.2141, 23.412], imo=93120)
+        expected = json.dumps(
+            {
+                'MMSI': 902134356,
+                'lat': 42.2141,
+                'long': 23.412,
+                'IMO': 93120
             }
-
+        )
         self.assertEqual(expected, actual)
 
 
-    def test_encode_batch_json(self):
-        actual = encode_batch_dict([[901234567, 90, 12], [312342134, 13, 90]], 'MMSI', 'lat', 'long')
-        expected = \
-            [
-                {
-                    'MMSI':901234567,
-                    'lat':90,
-                    'long':12
-                },
-                {
-                    'MMSI': 312342134,
-                    'lat': 13,
-                    'long': 90
-                }
-            ]
 
-        self.assertEqual(expected, actual)
