@@ -79,6 +79,12 @@ class MySQL_DAO:
         :returns: Array of ship documents in a json string.
         :return type: json
         """
+
+        if self.is_stub:
+            if type(tile_id) == int:
+                return 1
+            return -1
+
         query = """NOT IMPLEMENTED"""
         result = SQL_runner().run(query)
         pass
@@ -91,6 +97,13 @@ class MySQL_DAO:
         :returns: Document of the form {MMSI: ..., Positions: [{"lat": ..., "long": ...}, "IMO": ... ]}.
         :return type: json
         """
+
+        if self.is_stub:
+            if type(mmsi) == int:
+                return 1
+            return -1
+
+        # TODO: remake this query into 2 queries... 1 for getting the msgs... 1 for getting imo (if exists)
         query = """
                 SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude
                 FROM Vessel, AIS_Message, Position_Report
@@ -116,12 +129,19 @@ class MySQL_DAO:
         :returns: Position document of the form {"MMSI": ..., "lat": ..., "long": ..., "IMO": ... }.
         :return type: json
         """
+
+        if self.is_stub:
+            if type(mmsi) == int:
+                return 1
+            return -1
+
+        # TODO: remake this query into 2 queries... 1 for getting the msgs... 1 for getting imo (if exists)
         query = """
                 SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude
                 FROM Vessel, AIS_Message, Position_Report
                 WHERE Vessel.IMO=AIS_Message.Vessel_IMO
                 AND AIS_Message.Id=Position_Report.AISMessage_Id
-                and AIS_Message.MMSI={}
+                AND AIS_Message.MMSI={}
                 ORDER BY Timestamp DESC
                 LIMIT 1;
                 """ \
@@ -140,6 +160,12 @@ class MySQL_DAO:
         :return: Array of position documents of the form {"MMSI": ..., "lat": ..., "long": ..., "IMO": ...}.
         :return type: json
         """
+
+        if self.is_stub:
+            if type(port_id) == int:
+                return 1
+            return -1
+
         pass
 
     def read_all_ships_headed_to_port(self, port_name: str, country: str):
@@ -153,6 +179,12 @@ class MySQL_DAO:
                     Otherwise: an Array of Port documents.
         :return type:
         """
+
+        if self.is_stub:
+            if type(port_name) == str and type(country) == str:
+                return 1
+            return -1
+
         pass
 
     def read_all_ports_from_name(self, port_name: str, country=None):
@@ -164,6 +196,12 @@ class MySQL_DAO:
         :returns: Array of Port documents.
         :return type: json
         """
+
+        if self.is_stub:
+            if type(port_name) == str and (type(country) == str or country is None):
+                return 1
+            return -1
+
         pass
 
     def read_all_ship_positions_from_tile_scale3(self, port_name: str, country: str):
@@ -176,6 +214,12 @@ class MySQL_DAO:
                     Otherwise: an Array of Port documents.
         :return type: json
         """
+
+        if self.is_stub:
+            if type(port_name) == str and type(country) == str:
+                return 1
+            return -1
+
         pass
 
     def read_vessel_information(self, mmsi: int, imo=None, name=None, call_sign=None):
@@ -190,6 +234,12 @@ class MySQL_DAO:
         :returns: a Vessel document, with available and/or relevant properties.
         :return type: json
         """
+
+        if self.is_stub:
+            if type(mmsi) == int and (imo is None or type(imo) == int) and (name is None or type(name) == str) and (call_sign is None or type(call_sign) == str):
+                return 1
+            return -1
+
         pass
 
     def find_sub_map_tiles(self, tile_id: int):
@@ -200,6 +250,12 @@ class MySQL_DAO:
         :returns: Array of map tile description documents.
         :return type: json
         """
+
+        if self.is_stub:
+            if type(tile_id) == int:
+                return 1
+            return -1
+
         pass
 
     def get_tile_png(self, tile_id: int):
@@ -210,6 +266,12 @@ class MySQL_DAO:
         :returns: binary data for the PNG file for the tile_id.
         :return type: json
         """
+
+        if self.is_stub:
+            if type(tile_id) == int:
+                return 1
+            return -1
+
         pass
 
 

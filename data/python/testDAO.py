@@ -12,11 +12,68 @@ class DAO_Methods_UnitTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        DAO_UnitTest.DAO = MySQL_DAO(True)
+        DAO_Methods_UnitTest.DAO = MySQL_DAO(True)  # Turn on the method testing feature for the DAO
 
     @classmethod
     def tearDownClass(cls):
-        DAO_UnitTest.DAO = None
+        DAO_Methods_UnitTest.DAO = None
+
+    def test_insert_msg(self):
+        pass
+
+    def test_insert_msg_batch(self):
+        pass
+
+    def test_delete_msgs_older_5min(self):
+        pass
+
+    def test_read_all_ship_positions_from_tile(self):
+        result = self.DAO.read_all_ship_positions_from_tile(81293)
+        self.assertEqual(1, result)
+
+    def test_read_last_5_ship_positions_from_mmsi(self):
+        result = self.DAO.read_last_5_ship_positions_from_mmsi(123456789)
+        self.assertEqual(1, result)
+
+    def test_read_ship_current_position_from_mmsi(self):
+        result = self.DAO.read_ship_current_position_from_mmsi(123456789)
+        self.assertEqual(1, result)
+
+    def test_read_all_ship_positions_from_port(self):
+        result = self.DAO.read_all_ship_positions_from_port(412)
+        self.assertEqual(1, result)
+
+    def test_read_all_ships_headed_to_port(self):
+        result = self.DAO.read_all_ships_headed_to_port('PRT', 'USA')
+        self.assertEqual(1, result)
+
+    def test_read_all_ports_from_name_1(self):
+        result = self.DAO.read_all_ports_from_name('PRT')
+        self.assertEqual(1, result)
+
+    def test_read_all_ports_from_name_2(self):
+        result = self.DAO.read_all_ports_from_name('PRT', 'USA')
+        self.assertEqual(1, result)
+
+    def test_read_all_ship_positions_from_tile_scale3(self):
+        result = self.DAO.read_all_ship_positions_from_tile_scale3('PRT', 'USA')
+        self.assertEqual(1, result)
+
+    def test_read_vessel_information_1(self):
+        result = self.DAO.read_vessel_information(123456789)
+        self.assertEqual(1, result)
+
+    def test_read_vessel_information_2(self):
+        result = self.DAO.read_vessel_information(123456789, 48912, 'Ever Given', 'EVGI')
+        self.assertEqual(1, result)
+
+    def test_find_sub_map_tiles(self):
+        result = self.DAO.find_sub_map_tiles(347)
+        self.assertEqual(1, result)
+
+    def test_get_tile_png(self):
+        result = self.DAO.get_tile_png(347)
+        self.assertEqual(1, result)
 
 
 class DAO_UnitTest(unittest.TestCase):
