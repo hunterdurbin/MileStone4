@@ -97,8 +97,8 @@ class Encoder_UnitTest(unittest.TestCase):
         actual = encode(MMSI=123456789, Positions=[])
         expected = json.dumps(
             {
-            "MMSI": 123456789,
-            "Positions": []
+                "MMSI": 123456789,
+                "Positions": []
             }
         )
 
@@ -129,6 +129,3 @@ class Encoder_UnitTest(unittest.TestCase):
             }
         )
         self.assertEqual(expected, actual)
-
-
-

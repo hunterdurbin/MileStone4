@@ -5,8 +5,12 @@ from decimal import Decimal
 def encode(**kwargs):
     """
     Take in any number of key arguments and return a json string
+    e.g.
+    encode(**{foo: 14, bar: 94}) -> {foo: 14, bar: 94}
+    encode(foo=14, bar=94) -> {foo: 14, bar: 94}
 
-    :param **kwargs: Any number of key arguments
+    Note that specified order permutation may not apply since dictionary ordering is not guaranteed.
+
     :returns: document containing the kwargs
     :return type: json
     """
@@ -19,7 +23,7 @@ def encode_multiple_pos(mmsi, positions, imo):
 
     :param mmsi: (int) - A ship's mmsi
     :param positions: (list) - A list containing lists of position reports. Each list should be the form of [lat, long]
-    :param imo: a ship's imo
+    :param imo: (int) - A ship's imo
     :returns: A document
     :return type: json
     """
@@ -35,11 +39,11 @@ def encode_multiple_pos(mmsi, positions, imo):
 
 def encode_pos(mmsi, position, imo):
     """
-    Encode a document in the form of {MMSI: ..., Positions: [{"lat": ..., "long": ...}], "IMO": ... }
+    Encode a document in the form of {MMSI: ..., "lat": ..., "long": ..., "IMO": ... }
 
     :param mmsi: (int) - A ship's mmsi
-    :param position: A list containing a position report. Should be the form of [imo, lat, long]
-    :param imo: a ship's imo
+    :param position: A list containing a position report. Should be the form of [lat, long]
+    :param imo: (int) - A ship's imo
     :returns: A document
     :return type: json
     """
