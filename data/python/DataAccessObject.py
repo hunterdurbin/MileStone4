@@ -1,4 +1,5 @@
 from data.python.mysqlutils import SQL_runner
+from data.python.Encoder import encode, encode_batch_dict, encode_json
 import json
 
 
@@ -104,6 +105,8 @@ class MySQL_DAO:
             .format(mmsi)
         result = SQL_runner().run(query)
 
+        # TODO: fix encoders to make this section prettier, and to have the decoders dynamically work with any docs
+        # Problem is the Decimal object not serializable when json.dumps
         docs = {'MMSI': mmsi, 'Positions': []}
         for report in result:
             docs['Positions'].append({'lat': str(report[1]), 'long': str(report[2]), 'IMO': report[0]})
