@@ -68,9 +68,9 @@ class Installer:
             return None
 
         if self.os_type == OSType.WINDOWS:
-            return r"type data\sql\AISTestDataCreateTables.mysql | mysql -u {} -p".format(self.mysql_username)
+            return r'type data\sql\AISTestDataCreateTables.mysql | mysql -u "{}" -p'.format(self.mysql_username)
         elif self.os_type == OSType.POSIX:
-            return r"cat data/sql/AISTestDataCreateTables.mysql | mysql -u {} -p".format(self.mysql_username)
+            return r'cat data/sql/AISTestDataCreateTables.mysql | mysql -u "{}" -p'.format(self.mysql_username)
         return None
 
     def get_populate_table_cmd(self):
@@ -78,9 +78,9 @@ class Installer:
             return None
 
         if self.os_type == OSType.WINDOWS:
-            return r"cat data\sql\AISTestData_dump.mysql | mysql -u {} -p".format(self.mysql_username)
+            return r'cat data\sql\AISTestData_dump.mysql | mysql -u "{}" -p'.format(self.mysql_username)
         elif self.os_type == OSType.POSIX:
-            return r"cat data/sql/AISTestData_dump.mysql | mysql -u {} -p".format(self.mysql_username)
+            return r'cat data/sql/AISTestData_dump.mysql | mysql -u "{}" -p'.format(self.mysql_username)
         return None
 
     def permission_populate_tables(self):
