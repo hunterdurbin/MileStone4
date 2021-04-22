@@ -1,5 +1,6 @@
 import unittest
 from data.python.DataAccessObject import MySQL_DAO
+from data.python.Encoder import Encoder
 import json
 
 
@@ -79,3 +80,25 @@ class DAO_UnitTest(unittest.TestCase):
 
     def test_get_tile_png(self):
         pass
+
+
+class Encoder_UnitTest(unittest.TestCase):
+    encoder = None
+
+    @classmethod
+    def setUpClass(cls):
+        Encoder_UnitTest.encoder = Encoder()
+
+    @classmethod
+    def tearDownClass(cls):
+        Encoder_UnitTest.encoder = None
+
+    def test_encode(self):
+        actual = self.encoder.encode(MMSI=123456789, Positions=[])
+        expected = json.dumps(
+            {
+                'MMSI': 123456789,
+                'Positions': []
+            }
+        )
+        self.assertEqual(actual, expected)
