@@ -1,6 +1,6 @@
 import unittest
 from data.python.DataAccessObject import MySQL_DAO
-from data.python.Encoder import Encoder
+from data.python.Encoder import encode, encode_batch_dict, encode_json
 import json
 
 
@@ -46,7 +46,7 @@ class DAO_UnitTest(unittest.TestCase):
              }
         )
         json.dumps(expected)
-        self.assertEqual(actual, expected)
+        self.assertEqual(expected, actual)
 
     def test_read_ship_current_position_from_mmsi(self):
         actual = self.DAO.read_ship_current_position_from_mmsi(230631000)
@@ -58,7 +58,7 @@ class DAO_UnitTest(unittest.TestCase):
                 'IMO': 9468920
             }
         )
-        self.assertEqual(actual, expected)
+        self.assertEqual(expected, actual)
 
     def test_read_all_ship_positions_from_port(self):
         pass
@@ -83,22 +83,49 @@ class DAO_UnitTest(unittest.TestCase):
 
 
 class Encoder_UnitTest(unittest.TestCase):
-    encoder = None
 
     @classmethod
     def setUpClass(cls):
-        Encoder_UnitTest.encoder = Encoder()
+        pass
 
     @classmethod
     def tearDownClass(cls):
-        Encoder_UnitTest.encoder = None
+        pass
 
-    def test_encode(self):
-        actual = self.encoder.encode(MMSI=123456789, Positions=[])
+    def test_encode_json(self):
+        actual = encode_json(MMSI=123456789, Positions=[])
         expected = json.dumps(
             {
                 'MMSI': 123456789,
                 'Positions': []
             }
         )
-        self.assertEqual(actual, expected)
+        self.assertEqual(expected, actual)
+
+    def test_encode(self):
+        actual = encode(MMSI=123456789, Positions=[])
+        expected = {
+            'MMSI': 123456789,
+            'Positions': []
+            }
+
+        self.assertEqual(expected, actual)
+
+
+    def test_encode_batch_json(self):
+        actual = encode_batch_dict([[901234567, 90, 12], [312342134, 13, 90]], 'MMSI', 'lat', 'long')
+        expected = \
+            [
+                {
+                    'MMSI':901234567,
+                    'lat':90,
+                    'long':12
+                },
+                {
+                    'MMSI': 312342134,
+                    'lat': 13,
+                    'long': 90
+                }
+            ]
+
+        self.assertEqual(expected, actual)
