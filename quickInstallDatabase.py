@@ -1,4 +1,4 @@
-import os
+import os, time
 from enum import Enum, auto
 
 
@@ -50,9 +50,11 @@ class Installer:
             if self.permission_populate_tables():
                 print("Enter mysql password for user <{}>.\nThis will populate tables and may take a while..."
                       .format(Installer.db_name))
+                start_time = time.time()
                 failure = os.system(cmd_populate)
                 if failure:
                     return failure
+                print("(Completed in about {})".format(time.time()-start_time))
 
         if cmd_populate is None:
             input("Could not locate 'data\\sql\\AISTestData_dump.mysql' file.\n"
