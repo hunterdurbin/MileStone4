@@ -19,10 +19,44 @@ class DAO_Methods_UnitTest(unittest.TestCase):
         DAO_Methods_UnitTest.DAO = None
 
     def test_insert_msg(self):
-        pass
+        actual = self.DAO.insert_msg('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,'
+                                     '"MsgType":"position_report",'
+                                     '"Position":{"type":"Point","coordinates":[55.218332,12.371672]},'
+                                     '"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}')
+        self.assertEqual(1, actual)
 
     def test_insert_msg_batch(self):
-        pass
+        actual = self.DAO.insert_msg_batch([
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 304858000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.218332, 13.371672]},
+             "Status": "Under way using engine", "SoG": 10.8, "CoG": 94.3, "Heading": 97},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "AtoN", "MMSI": 992111840, "MsgType": "static_data",
+             "IMO": "Unknown", "Name": "WIND FARM BALTIC1NW", "VesselType": "Undefined", "Length": 60, "Breadth": 60,
+             "A": 30, "B": 30, "C": 30, "D": 30},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 219005465,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [54.572602, 11.929218]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 0, "CoG": 298.7, "Heading": 203},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 257961000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.00316, 12.809015]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 0.2, "CoG": 225.6, "Heading": 240},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "AtoN", "MMSI": 992111923, "MsgType": "static_data",
+             "IMO": "Unknown", "Name": "BALTIC2 WINDFARM SW", "VesselType": "Undefined", "Length": 8, "Breadth": 12,
+             "A": 4, "B": 4, "C": 4, "D": 8},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 257385000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.219403, 13.127725]},
+             "Status": "Under way using engine", "RoT": 25.7, "SoG": 12.3, "CoG": 96.5, "Heading": 101},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 376503000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [54.519373, 11.47914]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 7.6, "CoG": 294.4, "Heading": 290},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 229964000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [54.664513, 13.068712]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 9.3, "CoG": 68.2, "Heading": 71},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 219570000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.07848, 12.814233]},
+             "Status": "Under way using engine", "SoG": 0.8, "CoG": 65.8}
+        ])
+        batch_len = 9
+        self.assertEqual(batch_len, actual)
 
     def test_delete_msgs_older_5min(self):
         pass
@@ -87,15 +121,92 @@ class DAO_UnitTest(unittest.TestCase):
     def tearDownClass(cls):
         DAO_UnitTest.DAO = None
 
-    def test_insert_msg(self):
-        self.DAO.insert_msg({"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,
-                             "MsgType":"position_report",
-                             "Position":{"type":"Point","coordinates":[55.218332,12.371672]},
-                             "Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97})
-        pass
+    # Test position report is inserted correctly
+    def test_insert_msg_1(self):
+        actual = self.DAO.insert_msg('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,'
+                                     '"MsgType":"position_report",'
+                                     '"Position":{"type":"Point","coordinates":[55.218332,12.371672]},'
+                                     '"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}')
+        expected = 1
+        self.assertEqual(expected, actual)
 
-    def test_insert_msg_batch(self):
-        pass
+    # Test static data is inserted correctly
+    def test_insert_msg_2(self):
+        actual = self.DAO.insert_msg('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":210169000,'
+                                     '"MsgType":"static_data","IMO":9584865,"CallSign":"5BNZ3",'
+                                     '"Name":"KATHARINA SCHEPERS","VesselType":"Cargo","CargoTye":'
+                                     '"Category X","Length":152,"Breadth":24,"Draught":7.8,"Destination":"NODRM",'
+                                     '"ETA":"2020-11-18T09:00:00.000Z","A":143,"B":9,"C":13,"D":11}')
+        expected = 1
+        self.assertEqual(expected, actual)
+
+    # Test if all 9 msgs in the batch are inserted
+    def test_insert_msg_batch_1(self):
+        actual = self.DAO.insert_msg_batch([
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 304858000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.218332, 13.371672]},
+             "Status": "Under way using engine", "SoG": 10.8, "CoG": 94.3, "Heading": 97},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "AtoN", "MMSI": 992111840, "MsgType": "static_data",
+             "IMO": "Unknown", "Name": "WIND FARM BALTIC1NW", "VesselType": "Undefined", "Length": 60, "Breadth": 60,
+             "A": 30, "B": 30, "C": 30, "D": 30},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 219005465,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [54.572602, 11.929218]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 0, "CoG": 298.7, "Heading": 203},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 257961000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.00316, 12.809015]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 0.2, "CoG": 225.6, "Heading": 240},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "AtoN", "MMSI": 992111923, "MsgType": "static_data",
+             "IMO": "Unknown", "Name": "BALTIC2 WINDFARM SW", "VesselType": "Undefined", "Length": 8, "Breadth": 12,
+             "A": 4, "B": 4, "C": 4, "D": 8},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 257385000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.219403, 13.127725]},
+             "Status": "Under way using engine", "RoT": 25.7, "SoG": 12.3, "CoG": 96.5, "Heading": 101},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 376503000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [54.519373, 11.47914]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 7.6, "CoG": 294.4, "Heading": 290},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 229964000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [54.664513, 13.068712]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 9.3, "CoG": 68.2, "Heading": 71},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 219570000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.07848, 12.814233]},
+             "Status": "Under way using engine", "SoG": 0.8, "CoG": 65.8}
+        ])
+        expected = 9
+        self.assertEqual(expected, actual)
+
+    # Test if all 5 msgs in the batch are inserted (out of the 9 that are sent)
+    def test_insert_msg_batch_2(self):
+        actual = self.DAO.insert_msg_batch([
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 304858000,
+             "MsgType": "false_report", "Position": {"type": "Point", "coordinates": [55.218332, 13.371672]},
+             "Status": "Under way using engine", "SoG": 10.8, "CoG": 94.3, "Heading": 97},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "AtoN", "MMSI": 992111840, "MsgType": "static_data",
+             "IMO": "Unknown", "Name": "WIND FARM BALTIC1NW", "VesselType": "Undefined", "Length": 60, "Breadth": 60,
+             "A": 30, "B": 30, "C": 30, "D": 30},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 219005465,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [54.572602, 11.929218]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 0, "CoG": 298.7, "Heading": 203},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 257961000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.00316, 12.809015]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 0.2, "CoG": 225.6, "Heading": 240},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "AtoN", "MMSI": 992111923, "MsgType": "false_report",
+             "IMO": "Unknown", "Name": "BALTIC2 WINDFARM SW", "VesselType": "Undefined", "Length": 8, "Breadth": 12,
+             "A": 4, "B": 4, "C": 4, "D": 8},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 257385000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.219403, 13.127725]},
+             "Status": "Under way using engine", "RoT": 25.7, "SoG": 12.3, "CoG": 96.5, "Heading": 101},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 376503000,
+             "MsgType": "false_report", "Position": {"type": "Point", "coordinates": [54.519373, 11.47914]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 7.6, "CoG": 294.4, "Heading": 290},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 229964000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [54.664513, 13.068712]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 9.3, "CoG": 68.2, "Heading": 71},
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 219570000,
+             "MsgType": "false_report", "Position": {"type": "Point", "coordinates": [55.07848, 12.814233]},
+             "Status": "Under way using engine", "SoG": 0.8, "CoG": 65.8}
+        ])
+        expected = 5
+        self.assertEqual(expected, actual)
 
     def test_delete_msgs_older_5min(self):
         pass
@@ -114,8 +225,7 @@ class DAO_UnitTest(unittest.TestCase):
                      {"lat": "54.749025", "long": "12.840288"},
                      {"lat": "54.748793", "long": "12.839228"},
                      {"lat": "54.748630", "long": "12.838472"}
-                 ],
-             "IMO": 9468920
+                 ]
              }
         )
         self.assertEqual(expected, actual)
@@ -126,8 +236,7 @@ class DAO_UnitTest(unittest.TestCase):
             {
                 'MMSI': 230631000,
                 'lat': '54.749385',
-                'long': '12.841955',
-                'IMO': 9468920
+                'long': '12.841955'
             }
         )
         self.assertEqual(expected, actual)
@@ -211,45 +320,51 @@ class Encoder_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_extract_message_position_1(self):
-        actual = extract_message_position({"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":249579000,
-                                           "MsgType":"position_report",
-                                           "Position":{"type":"Point","coordinates":[54.968268,13.886702]},
-                                           "Status":"Under way using engine","RoT":1.6,"SoG":14.3,"CoG":72.7,
-                                           "Heading":73})
+        actual = extract_message_position(
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 249579000,
+             "MsgType": "position_report",
+             "Position": {"type": "Point", "coordinates": [54.968268, 13.886702]},
+             "Status": "Under way using engine", "RoT": 1.6, "SoG": 14.3, "CoG": 72.7,
+             "Heading": 73})
         expected = {'MsgType': 'position_report', 'MMSI': 249579000, 'Timestamp': '2020-11-18 00:00:00',
                     'Class': 'Class A', 'Latitude': 54.968268, 'Longitude': 13.886702,
                     'Status': 'Under way using engine', 'RoT': 1.6, 'SoG': 14.3, 'CoG': 72.7, 'Heading': 73}
         self.assertEqual(expected, actual)
 
     def test_extract_message_position_2(self):
-        actual = extract_message_position({"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":257961000,
-                                           "MsgType":"position_report","Position":
-                                               {"type":"Point","coordinates":[55.00316,12.809015]},
-                                           "Status":"Under way using engine","RoT":0,"SoG":0.2,"CoG":225.6,
-                                           "Heading":240})
-        expected = {'MsgType': 'position_report', 'MMSI': 257961000, 'Timestamp': '2020-11-18 00:00:00', 'Class': 'Class A', 'Latitude': 55.00316,
+        actual = extract_message_position(
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 257961000,
+             "MsgType": "position_report", "Position":
+                 {"type": "Point", "coordinates": [55.00316, 12.809015]},
+             "Status": "Under way using engine", "RoT": 0, "SoG": 0.2, "CoG": 225.6,
+             "Heading": 240})
+        expected = {'MsgType': 'position_report', 'MMSI': 257961000, 'Timestamp': '2020-11-18 00:00:00',
+                    'Class': 'Class A', 'Latitude': 55.00316,
                     'Longitude': 12.809015, 'Status': 'Under way using engine', 'RoT': 0, 'SoG': 0.2, 'CoG': 225.6,
                     'Heading': 240}
         self.assertEqual(expected, actual)
 
     def test_extract_message_static_1(self):
-        actual = extract_message_static({"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":219023635,
-                                         "MsgType":"static_data","IMO":"Unknown","CallSign":"OX3103","Name":"SKJOLD R",
-                                         "VesselType":"Other","CargoTye":"No additional information","Length":12,
-                                         "Breadth":4,"Draught":1.5,"Destination":"HANSTHOLM",
-                                         "ETA":"2021-07-14T23:00:00.000Z","A":8,"B":4,"C":2,"D":2})
-        expected = {'MsgType': 'static_data', 'MMSI': 219023635, 'IMO': 'Unknown', 'Timestamp': '2020-11-18 00:00:00', 'Class': 'Class A',
+        actual = extract_message_static({"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 219023635,
+                                         "MsgType": "static_data", "IMO": "Unknown", "CallSign": "OX3103",
+                                         "Name": "SKJOLD R",
+                                         "VesselType": "Other", "CargoTye": "No additional information", "Length": 12,
+                                         "Breadth": 4, "Draught": 1.5, "Destination": "HANSTHOLM",
+                                         "ETA": "2021-07-14T23:00:00.000Z", "A": 8, "B": 4, "C": 2, "D": 2})
+        expected = {'MsgType': 'static_data', 'MMSI': 219023635, 'IMO': 'Unknown', 'Timestamp': '2020-11-18 00:00:00',
+                    'Class': 'Class A',
                     'CallSign': 'OX3103', 'Name': 'SKJOLD R', 'VesselType': 'Other', 'Length': 12, 'Breadth': 4,
                     'Draught': 1.5, 'Destination': 'HANSTHOLM', 'ETA': '2021-07-14 23:00:00'}
         self.assertEqual(expected, actual)
 
     def test_extract_message_static_2(self):
-        actual = extract_message_static({"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":265011000,
-                                         "MsgType":"static_data","IMO":8616087,"CallSign":"SBEN","Name":"SOFIA",
-                                         "VesselType":"Cargo","Length":72,"Breadth":11,"Draught":3.7,
-                                         "Destination":"DK VEJ","ETA":"2020-11-18T10:00:00.000Z",
-                                         "A":59,"B":13,"C":6,"D":5})
-        expected = {'MsgType': 'static_data', 'MMSI': 265011000, 'IMO': 8616087, 'Timestamp': '2020-11-18 00:00:00', 'Class': 'Class A',
+        actual = extract_message_static({"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 265011000,
+                                         "MsgType": "static_data", "IMO": 8616087, "CallSign": "SBEN", "Name": "SOFIA",
+                                         "VesselType": "Cargo", "Length": 72, "Breadth": 11, "Draught": 3.7,
+                                         "Destination": "DK VEJ", "ETA": "2020-11-18T10:00:00.000Z",
+                                         "A": 59, "B": 13, "C": 6, "D": 5})
+        expected = {'MsgType': 'static_data', 'MMSI': 265011000, 'IMO': 8616087, 'Timestamp': '2020-11-18 00:00:00',
+                    'Class': 'Class A',
                     'CallSign': 'SBEN', 'Name': 'SOFIA', 'VesselType': 'Cargo', 'Length': 72, 'Breadth': 11,
                     'Draught': 3.7, 'Destination': 'DK VEJ', 'ETA': '2020-11-18 10:00:00'}
         self.assertEqual(expected, actual)
@@ -259,7 +374,8 @@ class Encoder_UnitTest(unittest.TestCase):
                                  '"MsgType":"position_report","Position":'
                                  '{"type":"Point","coordinates":[55.00316,12.809015]},'
                                  '"Status":"Under way using engine","RoT":0,"SoG":0.2,"CoG":225.6,"Heading":240}')
-        expected = {'MsgType': 'position_report', 'MMSI': 257961000, 'Timestamp': '2020-11-18 00:00:00', 'Class': 'Class A', 'Latitude': 55.00316,
+        expected = {'MsgType': 'position_report', 'MMSI': 257961000, 'Timestamp': '2020-11-18 00:00:00',
+                    'Class': 'Class A', 'Latitude': 55.00316,
                     'Longitude': 12.809015, 'Status': 'Under way using engine', 'RoT': 0, 'SoG': 0.2, 'CoG': 225.6,
                     'Heading': 240}
         self.assertEqual(expected, actual)
@@ -269,7 +385,8 @@ class Encoder_UnitTest(unittest.TestCase):
                                  '"MsgType":"static_data","IMO":8616087,"CallSign":"SBEN","Name":"SOFIA",'
                                  '"VesselType":"Cargo","Length":72,"Breadth":11,"Draught":3.7,'
                                  '"Destination":"DK VEJ","ETA":"2020-11-18T10:00:00.000Z","A":59,"B":13,"C":6,"D":5}')
-        expected = {'MsgType': 'static_data', 'MMSI': 265011000, 'IMO': 8616087, 'Timestamp': '2020-11-18 00:00:00', 'Class': 'Class A',
+        expected = {'MsgType': 'static_data', 'MMSI': 265011000, 'IMO': 8616087, 'Timestamp': '2020-11-18 00:00:00',
+                    'Class': 'Class A',
                     'CallSign': 'SBEN', 'Name': 'SOFIA', 'VesselType': 'Cargo', 'Length': 72, 'Breadth': 11,
                     'Draught': 3.7, 'Destination': 'DK VEJ', 'ETA': '2020-11-18 10:00:00'}
         self.assertEqual(expected, actual)

@@ -1,18 +1,18 @@
-from data.python.mysqlutils import SQL_runner
+from data.python.mysqlutils import MySQLConnectionManager
 from data.python.Encoder import *
 from data.python.mysqlBuilder import *
-import json
+import json, os
 
 
 #NoahConn Test Push
-
 
 class MySQL_DAO:
 
     def __init__(self, stub=False):
         self.is_stub = stub
+        self.config = '../sql/connection_data.conf'
 
-    def insert_msg(self, json_data):
+    def insert_msg(self, json_data: str):
         """
         Insert an AIS message (Position Report or Static Data).
 
@@ -21,76 +21,109 @@ class MySQL_DAO:
         :return type: json
         """
 
+        if self.is_stub:
+            if type(json_data) == str:
+                return 1
+            return -1
+
+        if type(json_data) != str:
+            print('Expected \'json_data\' to be type str')
+
         msg_content = extract_message(json_data)
-        # TODO: make enum class for the msg_contents, e.g. MMSI, CLASS, TIMESTAMP...
-        if msg_content['MsgType'] == 'position_report':
-            # Need to make a AIS_MESSAGE insert, and then get the Id that was inserted for pos report
-            ais_keys, ais_values = insert_ais_message_tuple_builder(msg_content)
-            pos_keys, pos_values = insert_position_report_tuple_builder(msg_content)
-            query_last_static_id = """
-                SELECT AISMessage_Id 
-                FROM AIS_MESSAGE, STATIC_DATA 
-                WHERE AIS_MESSAGE.Id=STATIC_DATA.AISMessage_Id 
-                AND mmsi={} 
-                ORDER BY Timestamp DESC 
-                LIMIT 1;
-            """.format(msg_content['MMSI'])
-            query_maps = """
-                SELECT Id 
-                FROM MAP_VIEW 
-                WHERE LongitudeW <= {} 
-                AND LongitudeE >= {} 
-                AND LatitudeN >= {} 
-                AND LatitudeS <= {} 
-                ORDER BY Id ASC;
-            """.format(msg_content['Longitude'], msg_content['Longitude'],
-                       msg_content['Latitude'], msg_content['Latitude'])
-            query_imo = """
-            
-            """
-            maps = SQL_runner().run(query_maps)
-            last_static_id = SQL_runner().run(query_last_static_id)[0][0] ### ADD THE IF ELSE query not empty
 
-            map1, map2, map3 = None, None, None
-            if maps:
-                map1, map2, map3 = maps[0][0], maps[1][0], maps[2][0]
+        if 'MsgType' not in msg_content:
+            return 0
 
-            ##TODO: ADD the query imo stuff
+        ais_keys, ais_values = insert_ais_message_tuple_builder(msg_content)
+        query_ais_message = """INSERT INTO AIS_MESSAGE ({})VALUES ({});"""\
+            .format(ais_keys, ais_values)
 
-            # TODO: Having trouble getting the next id value for the ais_message. I think that this will be done after we get this.
-            # TODO: Figure out better way to get next Id
+        try:
+            with MySQLConnectionManager(self.config) as con:
+                cursor = con.cursor()
+                cursor.execute(query_ais_message)
 
-            # TODO: Ask about what to do with NULL values. Do we follow the standard AIS thing. e.g. if lat is null, do we insert 91? (or something like that?)
-            query_ais_message = """
-                BEGIN;
-                INSERT INTO AIS_MESSAGE ({})
-                VALUES ({});
-                
-                INSERT INTO POSITION_REPORT 
-                (AISMessage_Id, {}, LastStaticData_Id, MapView1_Id, MapView2_Id, MapView3_Id)
-                VALUES 
-                (LAST_INSERT_ID(), {}, {}, {}, {}, {});
-                COMMIT;
-            """.format(ais_keys, ais_values, pos_keys, pos_values, last_static_id, map1, map2, map3)
-            # print(SQL_runner().run(query_ais_message)[0][0])
+                if msg_content['MsgType'] == 'position_report':
+                    pos_keys, pos_values = insert_position_report_tuple_builder(msg_content)
+                    query_pos_report = "INSERT INTO POSITION_REPORT " \
+                                       "(AISMessage_Id, {}, LastStaticData_Id, MapView1_Id, MapView2_Id, MapView3_Id) " \
+                                       "VALUES " \
+                                       "(LAST_INSERT_ID(), {}, NULL, NULL, NULL, NULL);" \
+                        .format(pos_keys, pos_values)
 
+                    cursor.execute(query_pos_report)
+                elif msg_content['MsgType'] == 'static_data':
+                    static_keys, static_values = insert_static_data_tuple_builder(msg_content)
+                    query_static_data = "INSERT INTO STATIC_DATA " \
+                                        "(AISMessage_Id, {}, DestinationPort_Id) " \
+                                        "VALUES " \
+                                        "(LAST_INSERT_ID(), {}, NULL); "\
+                        .format(static_keys, static_values)
+                    cursor.execute(query_static_data)
+                con.commit()
+        except Exception as e:
+            print(e)
+            return 0
+        return 1
 
-
-
-
-        elif msg_content['MsgType'] == 'static_data':
-            pass
-        return 0
-
-    def insert_msg_batch(self, json_data: list):
+    def insert_msg_batch(self, batch: list):
         """
         Insert a batch of AIS messages (Static Data and/or Position Reports).
 
-        :param json_data: A list of json string AIS messages to insert
+        :param batch: A list of dictionary AIS messages to insert
         :returns: Number of insertions made.
         :return type: json
         """
-        pass
+
+        if self.is_stub:
+            if type(batch) == list:
+                return len(batch)
+            return -1
+
+        if type(batch) != list:
+            print('Expected \'batch\' to be a list.')
+            return -1
+
+        successes = 0
+        with MySQLConnectionManager(self.config) as con:
+            cursor = con.cursor()
+
+            for msg_dict in batch:
+                msg_dict = extract_message(msg_dict)
+                ais_keys, ais_values = insert_ais_message_tuple_builder(msg_dict)
+                query_ais_message = "INSERT INTO AIS_MESSAGE ({}) VALUES ({});" \
+                    .format(ais_keys, ais_values)
+                cursor.execute(query_ais_message)
+
+                if 'MsgType' not in msg_dict:
+                    con.rollback()
+                    continue
+
+                if msg_dict['MsgType'] == 'position_report':
+                    pos_keys, pos_values = insert_position_report_tuple_builder(msg_dict)
+                    query_pos_report = "INSERT INTO POSITION_REPORT " \
+                                       "(AISMessage_Id, {}, LastStaticData_Id, MapView1_Id, MapView2_Id, MapView3_Id) " \
+                                       "VALUES " \
+                                       "(LAST_INSERT_ID(), {}, NULL, NULL, NULL, NULL);" \
+                        .format(pos_keys, pos_values)
+                    cursor.execute(query_pos_report)
+
+                elif msg_dict['MsgType'] == 'static_data':
+                    static_keys, static_values = insert_static_data_tuple_builder(msg_dict)
+                    query_static_data = "INSERT INTO STATIC_DATA " \
+                                        "(AISMessage_Id, {}, DestinationPort_Id) " \
+                                        "VALUES " \
+                                        "(LAST_INSERT_ID(), {}, NULL); " \
+                        .format(static_keys, static_values)
+                    cursor.execute(query_static_data)
+                else:
+                    con.rollback()
+                    continue
+
+                successes += cursor.rowcount
+                con.commit()
+
+        return successes
 
     def delete_msgs_older_5min(self, current_timestamp):
         """
@@ -117,7 +150,7 @@ class MySQL_DAO:
             return -1
 
         query = """NOT IMPLEMENTED"""
-        result = SQL_runner().run(query)
+
         pass
 
     def read_last_5_ship_positions_from_mmsi(self, mmsi: int):
@@ -134,34 +167,29 @@ class MySQL_DAO:
                 return 1
             return -1
 
-        # TODO: remake this query into 2 queries... 1 for getting the msgs... 1 for getting imo (if exists)
-        query_pos = """
-                SELECT POSITION_REPORT.Latitude, POSITION_REPORT.Longitude 
-                FROM AIS_MESSAGE, POSITION_REPORT 
-                WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id 
-                AND AIS_MESSAGE.MMSI={} 
-                ORDER BY Timestamp DESC 
-                LIMIT 5;
-                """ \
-            .format(mmsi)
-        query_imo = """
-                SELECT Vessel.IMO 
-                FROM VESSEL, AIS_MESSAGE, POSITION_REPORT 
-                WHERE VESSEL.IMO=AIS_MESSAGE.Vessel_IMO 
-                AND AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id 
-                AND AIS_MESSAGE.MMSI={} 
-                ORDER BY Timestamp DESC 
-                LIMIT 1;
-                """\
-            .format(mmsi)
-        result_pos = SQL_runner().run(query_pos)
-        result_imo = SQL_runner().run(query_imo)[0]
+        if type(mmsi) != int:
+            return -1
 
-        positions = [{'lat': pos[0], 'long': pos[1]} for pos in result_pos] if self._query_not_empty_(query_pos) else None
-        imo = result_imo[0] if self._query_not_empty_(result_imo) else None
+        query_pos = "SELECT POSITION_REPORT.Latitude, POSITION_REPORT.Longitude " \
+                    "FROM AIS_MESSAGE, POSITION_REPORT " \
+                    "WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id " \
+                    "AND AIS_MESSAGE.MMSI={} " \
+                    "ORDER BY Timestamp DESC LIMIT 5;"\
+            .format(mmsi)
 
-        docs = encode(MMSI=mmsi, Positions=positions, IMO=imo)
-        return docs
+        positions = []
+        with MySQLConnectionManager(self.config) as con:
+            cursor = con.cursor()
+            iterator = cursor.execute(query_pos, multi=True)
+
+            if iterator is not None:
+                for result in iterator:
+                    if result.with_rows:
+                        values = result.fetchall()
+                        for lat, long in values:
+                            positions.append({'lat': lat, 'long': long})
+
+        return encode(MMSI=mmsi, Positions=positions)
 
     def read_ship_current_position_from_mmsi(self, mmsi: int):
         """
@@ -177,35 +205,30 @@ class MySQL_DAO:
                 return 1
             return -1
 
-        # TODO: remake this query into 2 queries... 1 for getting the msgs... 1 for getting imo (if exists)
-        query_pos = """
-                SELECT POSITION_REPORT.Latitude, POSITION_REPORT.Longitude 
-                FROM AIS_MESSAGE, POSITION_REPORT 
-                WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id 
-                AND AIS_MESSAGE.MMSI={} 
-                ORDER BY Timestamp DESC 
-                LIMIT 1;
-                """ \
-            .format(mmsi)
-        query_imo = """
-                SELECT VESSEL.IMO 
-                FROM VESSEL, AIS_MESSAGE, POSITION_REPORT  
-                WHERE VESSEL.IMO=AIS_MESSAGE.Vessel_IMO 
-                AND AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id 
-                AND AIS_MESSAGE.MMSI={} 
-                ORDER BY Timestamp DESC 
-                LIMIT 1;
-                """\
-            .format(mmsi)
-        result_pos = SQL_runner().run(query_pos)[0]
-        result_imo = SQL_runner().run(query_imo)[0]
+        if type(mmsi) != int:
+            return -1
 
-        lat = result_pos[0] if self._query_not_empty_(result_pos) else None
-        long_ = result_pos[1] if self._query_not_empty_(result_pos) else None
-        imo = result_imo[0] if self._query_not_empty_(result_imo) else None
+        query_pos = "SELECT POSITION_REPORT.Latitude, POSITION_REPORT.Longitude " \
+                    "FROM AIS_MESSAGE, POSITION_REPORT " \
+                    "WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id " \
+                    "AND AIS_MESSAGE.MMSI={} " \
+                    "ORDER BY Timestamp DESC " \
+                    "LIMIT 1;"\
+            .format(mmsi)
 
-        docs = encode(MMSI=mmsi, lat=lat, long=long_, IMO=imo)
-        return docs
+        _lat = None
+        _long = None
+        with MySQLConnectionManager(self.config) as con:
+            cursor = con.cursor()
+            iterator = cursor.execute(query_pos, multi=True)
+            if iterator is not None:
+                for result in iterator:
+                    if result.with_rows:
+                        for lat, long in result.fetchall():
+                            _lat = lat
+                            _long = long
+
+        return encode(MMSI=mmsi, lat=_lat, long=_long)
 
     def read_all_ship_positions_from_port(self, port_id: int):
         """
