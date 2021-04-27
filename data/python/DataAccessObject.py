@@ -12,63 +12,9 @@ class MySQL_DAO:
         self.is_stub = stub
         self.config = '../sql/connection_data.conf'
 
-    def insert_msg(self, json_data: str):
-        """
-        Insert an AIS message (Position Report or Static Data).
-
-        :param json_data: A single json string of a message to insert
-        :returns: 1/0 for success/failure upon message insertion.
-        :return type: json
-        """
-
-        if self.is_stub:
-            if type(json_data) == str:
-                return 1
-            return -1
-
-        if type(json_data) != str:
-            print('Expected \'json_data\' to be type str')
-
-        msg_content = extract_message(json_data)
-
-        if 'MsgType' not in msg_content:
-            return 0
-
-        ais_keys, ais_values = insert_ais_message_tuple_builder(msg_content)
-        query_ais_message = """INSERT INTO AIS_MESSAGE ({})VALUES ({});"""\
-            .format(ais_keys, ais_values)
-
-        try:
-            with MySQLConnectionManager(self.config) as con:
-                cursor = con.cursor()
-                cursor.execute(query_ais_message)
-
-                if msg_content['MsgType'] == 'position_report':
-                    pos_keys, pos_values = insert_position_report_tuple_builder(msg_content)
-                    query_pos_report = "INSERT INTO POSITION_REPORT " \
-                                       "(AISMessage_Id, {}, LastStaticData_Id, MapView1_Id, MapView2_Id, MapView3_Id) " \
-                                       "VALUES " \
-                                       "(LAST_INSERT_ID(), {}, NULL, NULL, NULL, NULL);" \
-                        .format(pos_keys, pos_values)
-
-                    cursor.execute(query_pos_report)
-                elif msg_content['MsgType'] == 'static_data':
-                    static_keys, static_values = insert_static_data_tuple_builder(msg_content)
-                    query_static_data = "INSERT INTO STATIC_DATA " \
-                                        "(AISMessage_Id, {}, DestinationPort_Id) " \
-                                        "VALUES " \
-                                        "(LAST_INSERT_ID(), {}, NULL); "\
-                        .format(static_keys, static_values)
-                    cursor.execute(query_static_data)
-                con.commit()
-        except Exception as e:
-            print(e)
-            return 0
-        return 1
-
     def insert_msg_batch(self, batch: list):
         """
-        Insert a batch of AIS messages (Static Data and/or Position Reports).
+        Insert a batch of AIS messages (Static Data and/or Position Reports)
 
         :param batch: A list of dictionary AIS messages to insert
         :returns: Number of insertions made.
@@ -125,9 +71,63 @@ class MySQL_DAO:
 
         return successes
 
+    def insert_msg(self, json_data: str):
+        """
+        Insert an AIS message (Position Report or Static Data)
+
+        :param json_data: A single json string of a message to insert
+        :returns: 1/0 for success/failure upon message insertion.
+        :return type: json
+        """
+
+        if self.is_stub:
+            if type(json_data) == str:
+                return 1
+            return -1
+
+        if type(json_data) != str:
+            print('Expected \'json_data\' to be type str')
+
+        msg_content = extract_message(json_data)
+
+        if 'MsgType' not in msg_content:
+            return 0
+
+        ais_keys, ais_values = insert_ais_message_tuple_builder(msg_content)
+        query_ais_message = """INSERT INTO AIS_MESSAGE ({})VALUES ({});"""\
+            .format(ais_keys, ais_values)
+
+        try:
+            with MySQLConnectionManager(self.config) as con:
+                cursor = con.cursor()
+                cursor.execute(query_ais_message)
+
+                if msg_content['MsgType'] == 'position_report':
+                    pos_keys, pos_values = insert_position_report_tuple_builder(msg_content)
+                    query_pos_report = "INSERT INTO POSITION_REPORT " \
+                                       "(AISMessage_Id, {}, LastStaticData_Id, MapView1_Id, MapView2_Id, MapView3_Id) " \
+                                       "VALUES " \
+                                       "(LAST_INSERT_ID(), {}, NULL, NULL, NULL, NULL);" \
+                        .format(pos_keys, pos_values)
+
+                    cursor.execute(query_pos_report)
+                elif msg_content['MsgType'] == 'static_data':
+                    static_keys, static_values = insert_static_data_tuple_builder(msg_content)
+                    query_static_data = "INSERT INTO STATIC_DATA " \
+                                        "(AISMessage_Id, {}, DestinationPort_Id) " \
+                                        "VALUES " \
+                                        "(LAST_INSERT_ID(), {}, NULL); "\
+                        .format(static_keys, static_values)
+                    cursor.execute(query_static_data)
+                con.commit()
+        except Exception as e:
+            print(e)
+            return 0
+        return 1
+
     def delete_msgs_older_5min(self, current_timestamp):
         """
-        Delete all AIS messages whose timestamp is more than 5 minutes older than current time.
+        Delete all AIS messages whose timestamp is more than 5 minutes older than current time
 
         :param current_timestamp:
         :returns: Number of deleted AIS messages.
@@ -135,63 +135,50 @@ class MySQL_DAO:
         """
         pass
 
-    def read_all_ship_positions_from_tile(self, tile_id):
+    def read_all_recent_ship_positions(self):
         """
-        Read all ship positions in the given tile.
+        Read all most recent ship positions
 
-        :param tile_id:
-        :returns: Array of ship documents in a json string.
+        :returns: Array of ship documents as json files
         :return type: json
         """
-
         if self.is_stub:
-            if type(tile_id) == int:
-                return 1
-            return -1
+            return 1
 
-        query = """NOT IMPLEMENTED"""
 
-        pass
+        query = """
+        CREATE TEMPORARY TABLE RECENT_VESSELS 
+        SELECT MMSI, MAX(Timestamp) AS Timestamp 
+        FROM AIS_MESSAGE, POSITION_REPORT  
+        WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id  
+        GROUP BY MMSI;
 
-    def read_last_5_ship_positions_from_mmsi(self, mmsi: int):
+        SELECT am.MMSI, pr.latitude, pr.longitude  
+        FROM AIS_MESSAGE as AM, POSITION_REPORT as PR, recent_vessels as RV  
+        WHERE AM.Id=PR.AISMessage_Id  
+        AND AM.MMSI=RV.MMSI 
+        AND AM.timestamp=RV.timestamp;
         """
-        Read last 5 positions of given MMSI.
 
-        :param mmsi: A ship's mmsi
-        :returns: Document of the form {MMSI: ..., Positions: [{"lat": ..., "long": ...}, "IMO": ... ]}.
-        :return type: json
-        """
-
-        if self.is_stub:
-            if type(mmsi) == int:
-                return 1
-            return -1
-
-        if type(mmsi) != int:
-            return -1
-
-        query_pos = "SELECT POSITION_REPORT.Latitude, POSITION_REPORT.Longitude " \
-                    "FROM AIS_MESSAGE, POSITION_REPORT " \
-                    "WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id " \
-                    "AND AIS_MESSAGE.MMSI={} " \
-                    "ORDER BY Timestamp DESC LIMIT 5;"\
-            .format(mmsi)
-
-        positions = []
+        ship_positions = []
         with MySQLConnectionManager(self.config) as con:
             cursor = con.cursor()
-            iterator = cursor.execute(query_pos, multi=True)
+            iterator = cursor.execute(query, multi=True)
 
-            if iterator is not None:
-                for result in iterator:
-                    if result.with_rows:
-                        values = result.fetchall()
-                        for lat, long in values:
-                            positions.append({'lat': lat, 'long': long})
+            if iterator is None:
+                return '[]'
 
-        return encode(MMSI=mmsi, Positions=positions)
+            for result in iterator:
+                if result.with_rows:
+                    ships = result.fetchall()
+                    for ship in ships:
+                        ship_positions.append({'MMSI': ship[0], 'lat': ship[1], 'long': ship[2]})
 
-    def read_ship_current_position_from_mmsi(self, mmsi: int):
+        ship_positions = json.dumps(ship_positions, default=default)
+        return ship_positions
+        pass
+
+    def read_ship_recent_position_from_mmsi(self, mmsi: int):
         """
         Read current position of given MMSI.
 
@@ -230,38 +217,41 @@ class MySQL_DAO:
 
         return encode(MMSI=mmsi, lat=_lat, long=_long)
 
-    def read_all_ship_positions_from_port(self, port_id: int):
+    def read_vessel_information(self, mmsi: int, imo=None, name=None, call_sign=None):
         """
-        Read all positions of ships headed to port with given Id.
+        Read permanent or transient vessel information matching the given MMSI, and 0 or more additional criteria:
+        IMO, Name, CallSign
 
-        :param port_id:
-        :return: Array of position documents of the form {"MMSI": ..., "lat": ..., "long": ..., "IMO": ...}.
+        :param mmsi: (int)
+        :param imo: (int) - (optional)
+        :param name: (str) - (optional)
+        :param call_sign: (str) - (optional)
+        :returns: a Vessel document, with available and/or relevant properties.
         :return type: json
         """
 
         if self.is_stub:
-            if type(port_id) == int:
+            if type(mmsi) == int and (imo is None or type(imo) == int) and (name is None or type(name) == str) and (call_sign is None or type(call_sign) == str):
                 return 1
             return -1
 
         pass
 
-    def read_all_ships_headed_to_port(self, port_name: str, country: str):
+    def read_all_ship_positions_from_tile(self, tile_id):
         """
-        Read all positions of ships headed to given port (as read from static data, or user input).
+        Read all most recent ship positions in the given tile.
 
-        :param port_name:
-        :param country:
-        :returns: If unique matching port: array of of Position documents of the form
-                    {"MMSI": ..., "lat": ..., "long": ..., "IMO": ...}.
-                    Otherwise: an Array of Port documents.
-        :return type:
+        :param tile_id:
+        :returns: Array of ship documents in a json string.
+        :return type: json
         """
 
         if self.is_stub:
-            if type(port_name) == str and type(country) == str:
+            if type(tile_id) == int:
                 return 1
             return -1
+
+        query = """NOT IMPLEMENTED"""
 
         pass
 
@@ -300,21 +290,74 @@ class MySQL_DAO:
 
         pass
 
-    def read_vessel_information(self, mmsi: int, imo=None, name=None, call_sign=None):
+    def read_last_5_ship_positions_from_mmsi(self, mmsi: int):
         """
-        Read permanent or transient vessel information matching the given MMSI, and 0 or more additional criteria:
-        IMO, Name, CallSign.
+        Read last 5 positions of given MMSI.
 
-        :param mmsi:
-        :param imo:
-        :param name:
-        :param call_sign:
-        :returns: a Vessel document, with available and/or relevant properties.
+        :param mmsi: A ship's mmsi
+        :returns: Document of the form {MMSI: ..., Positions: [{"lat": ..., "long": ...}, "IMO": ... ]}.
         :return type: json
         """
 
         if self.is_stub:
-            if type(mmsi) == int and (imo is None or type(imo) == int) and (name is None or type(name) == str) and (call_sign is None or type(call_sign) == str):
+            if type(mmsi) == int:
+                return 1
+            return -1
+
+        if type(mmsi) != int:
+            return -1
+
+        query_pos = "SELECT POSITION_REPORT.Latitude, POSITION_REPORT.Longitude " \
+                    "FROM AIS_MESSAGE, POSITION_REPORT " \
+                    "WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id " \
+                    "AND AIS_MESSAGE.MMSI={} " \
+                    "ORDER BY Timestamp DESC LIMIT 5;" \
+            .format(mmsi)
+
+        positions = []
+        with MySQLConnectionManager(self.config) as con:
+            cursor = con.cursor()
+            iterator = cursor.execute(query_pos, multi=True)
+
+            if iterator is not None:
+                for result in iterator:
+                    if result.with_rows:
+                        values = result.fetchall()
+                        for lat, long in values:
+                            positions.append({'lat': lat, 'long': long})
+
+        return encode(MMSI=mmsi, Positions=positions)
+
+    def read_all_ship_positions_to_port(self, port_id: int):
+        """
+        Read most recent positions of ships headed to port with given Id
+
+        :param port_id:
+        :return: Array of position documents of the form {"MMSI": ..., "lat": ..., "long": ..., "IMO": ...}.
+        :return type: json
+        """
+
+        if self.is_stub:
+            if type(port_id) == int:
+                return 1
+            return -1
+
+        pass
+
+    def read_all_ships_headed_to_port(self, port_name: str, country: str):
+        """
+        Read all positions of ships headed to given port (as read from static data, or user input).
+
+        :param port_name:
+        :param country:
+        :returns: If unique matching port: array of of Position documents of the form
+                    {"MMSI": ..., "lat": ..., "long": ..., "IMO": ...}.
+                    Otherwise: an Array of Port documents.
+        :return type:
+        """
+
+        if self.is_stub:
+            if type(port_name) == str and type(country) == str:
                 return 1
             return -1
 

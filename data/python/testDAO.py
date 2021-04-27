@@ -18,14 +18,14 @@ class DAO_Methods_UnitTest(unittest.TestCase):
     def tearDownClass(cls):
         DAO_Methods_UnitTest.DAO = None
 
-    def test_insert_msg(self):
+    def test_insert_msg_interface(self):
         actual = self.DAO.insert_msg('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,'
                                      '"MsgType":"position_report",'
                                      '"Position":{"type":"Point","coordinates":[55.218332,12.371672]},'
                                      '"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}')
         self.assertEqual(1, actual)
 
-    def test_insert_msg_batch(self):
+    def test_insert_msg_batch_interface(self):
         actual = self.DAO.insert_msg_batch([
             {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 304858000,
              "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.218332, 13.371672]},
@@ -58,54 +58,58 @@ class DAO_Methods_UnitTest(unittest.TestCase):
         batch_len = 9
         self.assertEqual(batch_len, actual)
 
-    def test_delete_msgs_older_5min(self):
+    def test_delete_msgs_older_5min_interface(self):
         pass
 
-    def test_read_all_ship_positions_from_tile(self):
+    def test_read_all_recent_ship_positions(self):
+        actual = self.DAO.read_all_recent_ship_positions()
+        self.assertEqual(1, actual)
+
+    def test_read_all_ship_positions_from_tile_interface(self):
         result = self.DAO.read_all_ship_positions_from_tile(81293)
         self.assertEqual(1, result)
 
-    def test_read_last_5_ship_positions_from_mmsi(self):
+    def test_read_last_5_ship_positions_from_mmsi_interface(self):
         result = self.DAO.read_last_5_ship_positions_from_mmsi(123456789)
         self.assertEqual(1, result)
 
-    def test_read_ship_current_position_from_mmsi(self):
-        result = self.DAO.read_ship_current_position_from_mmsi(123456789)
+    def test_read_ship_recent_position_from_mmsi_interface(self):
+        result = self.DAO.read_ship_recent_position_from_mmsi(123456789)
         self.assertEqual(1, result)
 
-    def test_read_all_ship_positions_from_port(self):
-        result = self.DAO.read_all_ship_positions_from_port(412)
+    def test_read_all_ship_positions_to_port_interface(self):
+        result = self.DAO.read_all_ship_positions_to_port(412)
         self.assertEqual(1, result)
 
-    def test_read_all_ships_headed_to_port(self):
+    def test_read_all_ships_headed_to_port_interface(self):
         result = self.DAO.read_all_ships_headed_to_port('PRT', 'USA')
         self.assertEqual(1, result)
 
-    def test_read_all_ports_from_name_1(self):
+    def test_read_all_ports_from_name_1_interface(self):
         result = self.DAO.read_all_ports_from_name('PRT')
         self.assertEqual(1, result)
 
-    def test_read_all_ports_from_name_2(self):
+    def test_read_all_ports_from_name_2_interface(self):
         result = self.DAO.read_all_ports_from_name('PRT', 'USA')
         self.assertEqual(1, result)
 
-    def test_read_all_ship_positions_from_tile_scale3(self):
+    def test_read_all_ship_positions_from_tile_scale3_interface(self):
         result = self.DAO.read_all_ship_positions_from_tile_scale3('PRT', 'USA')
         self.assertEqual(1, result)
 
-    def test_read_vessel_information_1(self):
+    def test_read_vessel_information_1_interface(self):
         result = self.DAO.read_vessel_information(123456789)
         self.assertEqual(1, result)
 
-    def test_read_vessel_information_2(self):
+    def test_read_vessel_information_2_interface(self):
         result = self.DAO.read_vessel_information(123456789, 48912, 'Ever Given', 'EVGI')
         self.assertEqual(1, result)
 
-    def test_find_sub_map_tiles(self):
+    def test_find_sub_map_tiles_interface(self):
         result = self.DAO.find_sub_map_tiles(347)
         self.assertEqual(1, result)
 
-    def test_get_tile_png(self):
+    def test_get_tile_png_interface(self):
         result = self.DAO.get_tile_png(347)
         self.assertEqual(1, result)
 
@@ -211,6 +215,10 @@ class DAO_UnitTest(unittest.TestCase):
     def test_delete_msgs_older_5min(self):
         pass
 
+    def test_read_all_recent_ship_positions(self):
+        actual = self.DAO.read_all_recent_ship_positions()
+        pass
+
     def test_read_all_ship_positions_from_tile(self):
         pass
 
@@ -230,8 +238,8 @@ class DAO_UnitTest(unittest.TestCase):
         )
         self.assertEqual(expected, actual)
 
-    def test_read_ship_current_position_from_mmsi(self):
-        actual = self.DAO.read_ship_current_position_from_mmsi(230631000)
+    def test_ship_recent_position_from_mmsi(self):
+        actual = self.DAO.read_ship_recent_position_from_mmsi(230631000)
         expected = json.dumps(
             {
                 'MMSI': 230631000,
@@ -241,7 +249,7 @@ class DAO_UnitTest(unittest.TestCase):
         )
         self.assertEqual(expected, actual)
 
-    def test_read_all_ship_positions_from_port(self):
+    def test_read_all_ship_positions_to_port(self):
         pass
 
     def test_read_all_ships_headed_to_port(self):
