@@ -20,66 +20,47 @@ class MySQL_DAO:
         :returns: 1/0 for success/failure upon message insertion.
         :return type: json
         """
-        # TODO: find out a way to insert the damn data
 
         msg_content = extract_message(json_data)
         # TODO: make enum class for the msg_contents, e.g. MMSI, CLASS, TIMESTAMP...
         if msg_content['MsgType'] == 'position_report':
-            print(msg_content)
             # Need to make a AIS_MESSAGE insert, and then get the Id that was inserted for pos report
             ais_keys, ais_values = insert_ais_message_tuple_builder(msg_content)
             pos_keys, pos_values = insert_position_report_tuple_builder(msg_content)
             query_last_static_id = """
-                select AISMessage_Id 
-                from ais_message, static_data 
-                where ais_message.Id=static_data.AISMessage_Id 
-                and mmsi={} 
-                order by Timestamp DESC 
-                limit 1;
+                SELECT AISMessage_Id 
+                FROM AIS_MESSAGE, STATIC_DATA 
+                WHERE AIS_MESSAGE.Id=STATIC_DATA.AISMessage_Id 
+                AND mmsi={} 
+                ORDER BY Timestamp DESC 
+                LIMIT 1;
             """.format(msg_content['MMSI'])
-            query_map1 = """
-                select Id 
-                from MAP_VIEW 
-                where LongitudeW <= {} 
-                and LongitudeE >= {} 
-                and LatitudeN >= {} 
-                and LatitudeS <= {} 
-                and scale = 1;
-            """.format(msg_content['Longitude'], msg_content['Longitude'], msg_content['Latitude'], msg_content['Latitude'])
-            query_map2 = """
-            select Id 
-                from MAP_VIEW 
-                where LongitudeW <= {} 
-                and LongitudeE >= {} 
-                and LatitudeN >= {} 
-                and LatitudeS <= {} 
-                and scale = 2;
-            """.format(msg_content['Longitude'], msg_content['Longitude'], msg_content['Latitude'], msg_content['Latitude'])
-            query_map3 = """
-            select Id 
-                from MAP_VIEW 
-                where LongitudeW <= {} 
-                and LongitudeE >= {} 
-                and LatitudeN >= {} 
-                and LatitudeS <= {} 
-                and scale = 3;
-            """.format(msg_content['Longitude'], msg_content['Longitude'], msg_content['Latitude'], msg_content['Latitude'])
+            query_maps = """
+                SELECT Id 
+                FROM MAP_VIEW 
+                WHERE LongitudeW <= {} 
+                AND LongitudeE >= {} 
+                AND LatitudeN >= {} 
+                AND LatitudeS <= {} 
+                ORDER BY Id ASC;
+            """.format(msg_content['Longitude'], msg_content['Longitude'],
+                       msg_content['Latitude'], msg_content['Latitude'])
             query_imo = """
             
             """
-            map1 = SQL_runner().run(query_map1)
-            map2 = SQL_runner().run(query_map2)
-            map3 = SQL_runner().run(query_map3)
-            map1 = map1[0][0] if self._query_not_empty_(map1) else None
-            map2 = map2[0][0] if self._query_not_empty_(map2) else None
-            map3 = map3[0][0] if self._query_not_empty_(map3) else None
+            maps = SQL_runner().run(query_maps)
             last_static_id = SQL_runner().run(query_last_static_id)[0][0] ### ADD THE IF ELSE query not empty
+
+            map1, map2, map3 = None, None, None
+            if maps:
+                map1, map2, map3 = maps[0][0], maps[1][0], maps[2][0]
 
             ##TODO: ADD the query imo stuff
 
             # TODO: Having trouble getting the next id value for the ais_message. I think that this will be done after we get this.
             # TODO: Figure out better way to get next Id
 
+            # TODO: Ask about what to do with NULL values. Do we follow the standard AIS thing. e.g. if lat is null, do we insert 91? (or something like that?)
             query_ais_message = """
                 BEGIN;
                 INSERT INTO AIS_MESSAGE ({})
@@ -91,7 +72,7 @@ class MySQL_DAO:
                 (LAST_INSERT_ID(), {}, {}, {}, {}, {});
                 COMMIT;
             """.format(ais_keys, ais_values, pos_keys, pos_values, last_static_id, map1, map2, map3)
-            print(SQL_runner().run(query_ais_message)[0][0])
+            # print(SQL_runner().run(query_ais_message)[0][0])
 
 
 
@@ -155,21 +136,21 @@ class MySQL_DAO:
 
         # TODO: remake this query into 2 queries... 1 for getting the msgs... 1 for getting imo (if exists)
         query_pos = """
-                SELECT Position_Report.Latitude, Position_Report.Longitude
-                FROM AIS_Message, Position_Report
-                WHERE AIS_Message.Id=Position_Report.AISMessage_Id
-                AND AIS_Message.MMSI={}
-                ORDER BY Timestamp DESC
+                SELECT POSITION_REPORT.Latitude, POSITION_REPORT.Longitude 
+                FROM AIS_MESSAGE, POSITION_REPORT 
+                WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id 
+                AND AIS_MESSAGE.MMSI={} 
+                ORDER BY Timestamp DESC 
                 LIMIT 5;
                 """ \
             .format(mmsi)
         query_imo = """
-                SELECT Vessel.IMO
-                FROM Vessel, AIS_Message, Position_Report
-                WHERE Vessel.IMO=AIS_Message.Vessel_IMO
-                AND AIS_Message.Id=Position_Report.AISMessage_Id
-                AND AIS_Message.MMSI={}
-                ORDER BY Timestamp DESC
+                SELECT Vessel.IMO 
+                FROM VESSEL, AIS_MESSAGE, POSITION_REPORT 
+                WHERE VESSEL.IMO=AIS_MESSAGE.Vessel_IMO 
+                AND AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id 
+                AND AIS_MESSAGE.MMSI={} 
+                ORDER BY Timestamp DESC 
                 LIMIT 1;
                 """\
             .format(mmsi)
@@ -178,7 +159,6 @@ class MySQL_DAO:
 
         positions = [{'lat': pos[0], 'long': pos[1]} for pos in result_pos] if self._query_not_empty_(query_pos) else None
         imo = result_imo[0] if self._query_not_empty_(result_imo) else None
-
 
         docs = encode(MMSI=mmsi, Positions=positions, IMO=imo)
         return docs
@@ -199,21 +179,21 @@ class MySQL_DAO:
 
         # TODO: remake this query into 2 queries... 1 for getting the msgs... 1 for getting imo (if exists)
         query_pos = """
-                SELECT Position_Report.Latitude, Position_Report.Longitude
-                FROM AIS_Message, Position_Report
-                WHERE AIS_Message.Id=Position_Report.AISMessage_Id
-                AND AIS_Message.MMSI={}
-                ORDER BY Timestamp DESC
+                SELECT POSITION_REPORT.Latitude, POSITION_REPORT.Longitude 
+                FROM AIS_MESSAGE, POSITION_REPORT 
+                WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id 
+                AND AIS_MESSAGE.MMSI={} 
+                ORDER BY Timestamp DESC 
                 LIMIT 1;
                 """ \
             .format(mmsi)
         query_imo = """
-                SELECT Vessel.IMO
-                FROM Vessel, AIS_Message, Position_Report
-                WHERE Vessel.IMO=AIS_Message.Vessel_IMO
-                AND AIS_Message.Id=Position_Report.AISMessage_Id
-                AND AIS_Message.MMSI={}
-                ORDER BY Timestamp DESC
+                SELECT VESSEL.IMO 
+                FROM VESSEL, AIS_MESSAGE, POSITION_REPORT  
+                WHERE VESSEL.IMO=AIS_MESSAGE.Vessel_IMO 
+                AND AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id 
+                AND AIS_MESSAGE.MMSI={} 
+                ORDER BY Timestamp DESC 
                 LIMIT 1;
                 """\
             .format(mmsi)
