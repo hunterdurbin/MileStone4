@@ -14,46 +14,21 @@ def encode(**kwargs):
     :returns: document containing the kwargs
     :return type: json
     """
-    return json.dumps(kwargs, default=default)
+    _dict = dict()
+    for key, value in kwargs.items():
+        _dict[key] = value
+    return json.dumps(_dict, default=default)
 
 
-def encode_multiple_pos(mmsi, positions, imo):
+def decode(json_doc):
     """
-    Encode a document in the form of {MMSI: ..., Positions: [{"lat": ..., "long": ...}], "IMO": ... }
+    Decode a document into a python dictionary
 
-    :param mmsi: (int) - A ship's mmsi
-    :param positions: (list) - A list containing lists of position reports. Each list should be the form of [lat, long]
-    :param imo: (int) - A ship's imo
-    :returns: A document
-    :return type: json
+    :param json_doc:
+    :returns: python dictionary
+    :return type: dict
     """
-    result = {
-        'MMSI': mmsi,
-        'Positions': [],
-        'IMO': imo
-    }
-    for position_report in positions:
-        result['Positions'].append({'lat': position_report[0], 'long': position_report[1]})
-    return json.dumps(result, default=default)
-
-
-def encode_pos(mmsi, position, imo):
-    """
-    Encode a document in the form of {MMSI: ..., "lat": ..., "long": ..., "IMO": ... }
-
-    :param mmsi: (int) - A ship's mmsi
-    :param position: A list containing a position report. Should be the form of [lat, long]
-    :param imo: (int) - A ship's imo
-    :returns: A document
-    :return type: json
-    """
-    result = {
-        'MMSI': mmsi,
-        'lat': position[0],
-        'long': position[1],
-        'IMO': imo
-    }
-    return json.dumps(result, default=default)
+    return json.loads(json_doc)
 
 
 def default(o):
