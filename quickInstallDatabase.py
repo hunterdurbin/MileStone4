@@ -4,6 +4,7 @@ from enum import Enum, auto
 
 def main():
     Installer().run()
+    input('(Press \'enter\' to exit installer)')
 
 
 class OSType(Enum):
