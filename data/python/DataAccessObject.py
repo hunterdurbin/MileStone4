@@ -6,29 +6,6 @@ import json
 #NoahConn Test Push
 
 
-# Move these to own module
-def extract_type(json_data):
-    docs = json.loads(json_data)
-    type = docs['MsgType']
-    return type
-
-
-def extract_pos_report(json_data):
-
-    docs = json.loads(json_data)
-    values = (docs['MMSI'],
-              docs['Timestamp'],
-              docs['Class'],
-              docs['Position']['coordinates'][0],
-              docs['Position']['coordinates'][1],
-              docs['Status'],
-              docs['SoG'],
-              docs['CoG'],
-              docs['Heading']
-              )
-    return values
-
-
 class MySQL_DAO:
 
     def __init__(self, stub=False):
@@ -44,10 +21,11 @@ class MySQL_DAO:
         """
         # TODO: find out a way to insert the damn data
 
-        msg_type = extract_type(json_data)
-        if msg_type == 'position_report':
-            mmsi, timestamp, class_, lat, long_, status, sog, cog, heading = extract_pos_report(json_data)
-        elif msg_type == 'static_data':
+        msg_content = decode(json_data)
+        # TODO: make enum class for the msg_contents, e.g. MMSI, CLASS, TIMESTAMP...
+        if msg_content == 'position_report':
+            print(msg_content)
+        elif msg_content == 'static_data':
             pass
         return 0
 
@@ -104,21 +82,33 @@ class MySQL_DAO:
             return -1
 
         # TODO: remake this query into 2 queries... 1 for getting the msgs... 1 for getting imo (if exists)
-        query = """
-                SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude
-                FROM Vessel, AIS_Message, Position_Report
-                WHERE Vessel.IMO=AIS_Message.Vessel_IMO
-                AND AIS_Message.Id=Position_Report.AISMessage_Id
+        query_pos = """
+                SELECT Position_Report.Latitude, Position_Report.Longitude
+                FROM AIS_Message, Position_Report
+                WHERE AIS_Message.Id=Position_Report.AISMessage_Id
                 AND AIS_Message.MMSI={}
                 ORDER BY Timestamp DESC
                 LIMIT 5;
                 """ \
             .format(mmsi)
-        result = SQL_runner().run(query)
-        imo = result[0][0]
-        positions = [[pos[1], pos[2]] for pos in result]
+        query_imo = """
+                SELECT Vessel.IMO
+                FROM Vessel, AIS_Message, Position_Report
+                WHERE Vessel.IMO=AIS_Message.Vessel_IMO
+                AND AIS_Message.Id=Position_Report.AISMessage_Id
+                AND AIS_Message.MMSI={}
+                ORDER BY Timestamp DESC
+                LIMIT 1;
+                """\
+            .format(mmsi)
+        result_pos = SQL_runner().run(query_pos)
+        result_imo = SQL_runner().run(query_imo)[0]
 
-        docs = encode_multiple_pos(mmsi, positions, imo)
+        positions = [{'lat': pos[0], 'long': pos[1]} for pos in result_pos] if self._query_not_empty_(query_pos) else None
+        imo = result_imo[0] if self._query_not_empty_(result_imo) else None
+
+
+        docs = encode(MMSI=mmsi, Positions=positions, IMO=imo)
         return docs
 
     def read_ship_current_position_from_mmsi(self, mmsi: int):
@@ -136,20 +126,33 @@ class MySQL_DAO:
             return -1
 
         # TODO: remake this query into 2 queries... 1 for getting the msgs... 1 for getting imo (if exists)
-        query = """
-                SELECT Vessel.IMO, Position_Report.Latitude, Position_Report.Longitude
+        query_pos = """
+                SELECT Position_Report.Latitude, Position_Report.Longitude
+                FROM AIS_Message, Position_Report
+                WHERE AIS_Message.Id=Position_Report.AISMessage_Id
+                AND AIS_Message.MMSI={}
+                ORDER BY Timestamp DESC
+                LIMIT 1;
+                """ \
+            .format(mmsi)
+        query_imo = """
+                SELECT Vessel.IMO
                 FROM Vessel, AIS_Message, Position_Report
                 WHERE Vessel.IMO=AIS_Message.Vessel_IMO
                 AND AIS_Message.Id=Position_Report.AISMessage_Id
                 AND AIS_Message.MMSI={}
                 ORDER BY Timestamp DESC
                 LIMIT 1;
-                """ \
+                """\
             .format(mmsi)
-        result = SQL_runner().run(query)[0]
-        imo, lat, long_ = result[0], result[1], result[2]
+        result_pos = SQL_runner().run(query_pos)[0]
+        result_imo = SQL_runner().run(query_imo)[0]
 
-        docs = encode_pos(mmsi, [lat, long_], imo)
+        lat = result_pos[0] if self._query_not_empty_(result_pos) else None
+        long_ = result_pos[1] if self._query_not_empty_(result_pos) else None
+        imo = result_imo[0] if self._query_not_empty_(result_imo) else None
+
+        docs = encode(MMSI=mmsi, lat=lat, long=long_, IMO=imo)
         return docs
 
     def read_all_ship_positions_from_port(self, port_id: int):
@@ -273,6 +276,12 @@ class MySQL_DAO:
             return -1
 
         pass
+
+    @staticmethod
+    def _query_not_empty_(query_result):
+        if str(query_result) == str([]):
+            return False
+        return True
 
 
 # MySQL_DAO().insert_msg(
