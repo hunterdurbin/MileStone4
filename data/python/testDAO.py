@@ -114,7 +114,6 @@ class DAO_UnitTest(unittest.TestCase):
              "IMO": 9468920
              }
         )
-        json.dumps(expected)
         self.assertEqual(expected, actual)
 
     def test_read_ship_current_position_from_mmsi(self):
@@ -161,7 +160,7 @@ class Encoder_UnitTest(unittest.TestCase):
     def tearDownClass(cls):
         pass
 
-    def test_encode(self):
+    def test_encode_1(self):
         actual = encode(MMSI=123456789, Positions=[])
         expected = json.dumps(
             {
@@ -172,28 +171,101 @@ class Encoder_UnitTest(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_encode_multiple_pos(self):
-        actual = encode_multiple_pos(mmsi=902134356, positions=[[42.2141, 23.412], [41.9523, 51.124]], imo=93120)
+    def test_encode_2(self):
+        actual = encode(MMSI=123456789, Positions=[{'lat': 42.412, 'long': 49.124}])
         expected = json.dumps(
             {
-                'MMSI': 902134356,
-                'Positions': [
-                    {'lat': 42.2141, 'long': 23.412},
-                    {'lat': 41.9523, 'long': 51.124}
-                ],
-                'IMO': 93120
+                "MMSI": 123456789,
+                "Positions": [{'lat': 42.412, 'long': 49.124}]
             }
         )
+
         self.assertEqual(expected, actual)
 
-    def test_encode_pos(self):
-        actual = encode_pos(mmsi=902134356, position=[42.2141, 23.412], imo=93120)
-        expected = json.dumps(
-            {
-                'MMSI': 902134356,
-                'lat': 42.2141,
-                'long': 23.412,
-                'IMO': 93120
-            }
-        )
+    def test_decode_1(self):
+        actual = decode('{"Hunter": [6, 5, 14, 125]}')
+        expected = json.loads('{"Hunter": [6, 5, 14, 125]}')
+        self.assertEqual(expected, actual)
+
+    def test_decode_2(self):
+        actual = decode('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,"MsgType":'
+                        '"position_report","Position":{"type":"Point","coordinates":[55.218332,13.371672]},'
+                        '"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}')
+        expected = json.loads('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,"MsgType":'
+                              '"position_report","Position":{"type":"Point","coordinates":[55.218332,13.371672]},'
+                              '"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}')
+        self.assertEqual(expected, actual)
+
+    def test_extract_timestamp_1(self):
+        actual = extract_timestamp("2020-11-18T00:00:00.000Z")
+        expected = "2020-11-18 00:00:00"
+        self.assertEqual(expected, actual)
+
+    def test_extract_timestamp_2(self):
+        actual = extract_timestamp("2020-11-18T00:00:01.000Z")
+        expected = "2020-11-18 00:00:01"
+        self.assertEqual(expected, actual)
+
+    def test_extract_message_position_1(self):
+        actual = extract_message_position({"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":249579000,
+                                           "MsgType":"position_report",
+                                           "Position":{"type":"Point","coordinates":[54.968268,13.886702]},
+                                           "Status":"Under way using engine","RoT":1.6,"SoG":14.3,"CoG":72.7,
+                                           "Heading":73})
+        expected = {'MsgType': 'position_report', 'MMSI': 249579000, 'Timestamp': '2020-11-18 00:00:00',
+                    'Class': 'Class A', 'Latitude': 54.968268, 'Longitude': 13.886702,
+                    'Status': 'Under way using engine', 'RoT': 1.6, 'SoG': 14.3, 'CoG': 72.7, 'Heading': 73}
+        self.assertEqual(expected, actual)
+
+    def test_extract_message_position_2(self):
+        actual = extract_message_position({"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":257961000,
+                                           "MsgType":"position_report","Position":
+                                               {"type":"Point","coordinates":[55.00316,12.809015]},
+                                           "Status":"Under way using engine","RoT":0,"SoG":0.2,"CoG":225.6,
+                                           "Heading":240})
+        expected = {'MsgType': 'position_report', 'MMSI': 257961000, 'Timestamp': '2020-11-18 00:00:00', 'Class': 'Class A', 'Latitude': 55.00316,
+                    'Longitude': 12.809015, 'Status': 'Under way using engine', 'RoT': 0, 'SoG': 0.2, 'CoG': 225.6,
+                    'Heading': 240}
+        self.assertEqual(expected, actual)
+
+    def test_extract_message_static_1(self):
+        actual = extract_message_static({"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":219023635,
+                                         "MsgType":"static_data","IMO":"Unknown","CallSign":"OX3103","Name":"SKJOLD R",
+                                         "VesselType":"Other","CargoTye":"No additional information","Length":12,
+                                         "Breadth":4,"Draught":1.5,"Destination":"HANSTHOLM",
+                                         "ETA":"2021-07-14T23:00:00.000Z","A":8,"B":4,"C":2,"D":2})
+        expected = {'MsgType': 'static_data', 'MMSI': 219023635, 'IMO': 'Unknown', 'Timestamp': '2020-11-18 00:00:00', 'Class': 'Class A',
+                    'CallSign': 'OX3103', 'Name': 'SKJOLD R', 'VesselType': 'Other', 'Length': 12, 'Breadth': 4,
+                    'Draught': 1.5, 'Destination': 'HANSTHOLM', 'ETA': '2021-07-14 23:00:00'}
+        self.assertEqual(expected, actual)
+
+    def test_extract_message_static_2(self):
+        actual = extract_message_static({"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":265011000,
+                                         "MsgType":"static_data","IMO":8616087,"CallSign":"SBEN","Name":"SOFIA",
+                                         "VesselType":"Cargo","Length":72,"Breadth":11,"Draught":3.7,
+                                         "Destination":"DK VEJ","ETA":"2020-11-18T10:00:00.000Z",
+                                         "A":59,"B":13,"C":6,"D":5})
+        expected = {'MsgType': 'static_data', 'MMSI': 265011000, 'IMO': 8616087, 'Timestamp': '2020-11-18 00:00:00', 'Class': 'Class A',
+                    'CallSign': 'SBEN', 'Name': 'SOFIA', 'VesselType': 'Cargo', 'Length': 72, 'Breadth': 11,
+                    'Draught': 3.7, 'Destination': 'DK VEJ', 'ETA': '2020-11-18 10:00:00'}
+        self.assertEqual(expected, actual)
+
+    def test_extract_message_1(self):
+        actual = extract_message('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":257961000,'
+                                 '"MsgType":"position_report","Position":'
+                                 '{"type":"Point","coordinates":[55.00316,12.809015]},'
+                                 '"Status":"Under way using engine","RoT":0,"SoG":0.2,"CoG":225.6,"Heading":240}')
+        expected = {'MsgType': 'position_report', 'MMSI': 257961000, 'Timestamp': '2020-11-18 00:00:00', 'Class': 'Class A', 'Latitude': 55.00316,
+                    'Longitude': 12.809015, 'Status': 'Under way using engine', 'RoT': 0, 'SoG': 0.2, 'CoG': 225.6,
+                    'Heading': 240}
+        self.assertEqual(expected, actual)
+
+    def test_extract_message_2(self):
+        actual = extract_message('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":265011000,'
+                                 '"MsgType":"static_data","IMO":8616087,"CallSign":"SBEN","Name":"SOFIA",'
+                                 '"VesselType":"Cargo","Length":72,"Breadth":11,"Draught":3.7,'
+                                 '"Destination":"DK VEJ","ETA":"2020-11-18T10:00:00.000Z","A":59,"B":13,"C":6,"D":5}')
+        expected = {'MsgType': 'static_data', 'MMSI': 265011000, 'IMO': 8616087, 'Timestamp': '2020-11-18 00:00:00', 'Class': 'Class A',
+                    'CallSign': 'SBEN', 'Name': 'SOFIA', 'VesselType': 'Cargo', 'Length': 72, 'Breadth': 11,
+                    'Draught': 3.7, 'Destination': 'DK VEJ', 'ETA': '2020-11-18 10:00:00'}
         self.assertEqual(expected, actual)
