@@ -1,5 +1,6 @@
 from data.python.mysqlutils import SQL_runner
 from data.python.Encoder import *
+from data.python.mysqlBuilder import *
 import json
 
 
@@ -21,11 +22,82 @@ class MySQL_DAO:
         """
         # TODO: find out a way to insert the damn data
 
-        msg_content = decode(json_data)
+        msg_content = extract_message(json_data)
         # TODO: make enum class for the msg_contents, e.g. MMSI, CLASS, TIMESTAMP...
-        if msg_content == 'position_report':
+        if msg_content['MsgType'] == 'position_report':
             print(msg_content)
-        elif msg_content == 'static_data':
+            # Need to make a AIS_MESSAGE insert, and then get the Id that was inserted for pos report
+            ais_keys, ais_values = insert_ais_message_tuple_builder(msg_content)
+            pos_keys, pos_values = insert_position_report_tuple_builder(msg_content)
+            query_last_static_id = """
+                select AISMessage_Id 
+                from ais_message, static_data 
+                where ais_message.Id=static_data.AISMessage_Id 
+                and mmsi={} 
+                order by Timestamp DESC 
+                limit 1;
+            """.format(msg_content['MMSI'])
+            query_map1 = """
+                select Id 
+                from MAP_VIEW 
+                where LongitudeW <= {} 
+                and LongitudeE >= {} 
+                and LatitudeN >= {} 
+                and LatitudeS <= {} 
+                and scale = 1;
+            """.format(msg_content['Longitude'], msg_content['Longitude'], msg_content['Latitude'], msg_content['Latitude'])
+            query_map2 = """
+            select Id 
+                from MAP_VIEW 
+                where LongitudeW <= {} 
+                and LongitudeE >= {} 
+                and LatitudeN >= {} 
+                and LatitudeS <= {} 
+                and scale = 2;
+            """.format(msg_content['Longitude'], msg_content['Longitude'], msg_content['Latitude'], msg_content['Latitude'])
+            query_map3 = """
+            select Id 
+                from MAP_VIEW 
+                where LongitudeW <= {} 
+                and LongitudeE >= {} 
+                and LatitudeN >= {} 
+                and LatitudeS <= {} 
+                and scale = 3;
+            """.format(msg_content['Longitude'], msg_content['Longitude'], msg_content['Latitude'], msg_content['Latitude'])
+            query_imo = """
+            
+            """
+            map1 = SQL_runner().run(query_map1)
+            map2 = SQL_runner().run(query_map2)
+            map3 = SQL_runner().run(query_map3)
+            map1 = map1[0][0] if self._query_not_empty_(map1) else None
+            map2 = map2[0][0] if self._query_not_empty_(map2) else None
+            map3 = map3[0][0] if self._query_not_empty_(map3) else None
+            last_static_id = SQL_runner().run(query_last_static_id)[0][0] ### ADD THE IF ELSE query not empty
+
+            ##TODO: ADD the query imo stuff
+
+            # TODO: Having trouble getting the next id value for the ais_message. I think that this will be done after we get this.
+            # TODO: Figure out better way to get next Id
+
+            query_ais_message = """
+                BEGIN;
+                INSERT INTO AIS_MESSAGE ({})
+                VALUES ({});
+                
+                INSERT INTO POSITION_REPORT 
+                (AISMessage_Id, {}, LastStaticData_Id, MapView1_Id, MapView2_Id, MapView3_Id)
+                VALUES 
+                (LAST_INSERT_ID(), {}, {}, {}, {}, {});
+                COMMIT;
+            """.format(ais_keys, ais_values, pos_keys, pos_values, last_static_id, map1, map2, map3)
+            print(SQL_runner().run(query_ais_message)[0][0])
+
+
+
+
+
+        elif msg_content['MsgType'] == 'static_data':
             pass
         return 0
 

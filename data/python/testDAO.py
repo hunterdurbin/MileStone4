@@ -88,6 +88,10 @@ class DAO_UnitTest(unittest.TestCase):
         DAO_UnitTest.DAO = None
 
     def test_insert_msg(self):
+        self.DAO.insert_msg({"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,
+                             "MsgType":"position_report",
+                             "Position":{"type":"Point","coordinates":[55.218332,12.371672]},
+                             "Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97})
         pass
 
     def test_insert_msg_batch(self):
