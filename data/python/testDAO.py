@@ -251,11 +251,33 @@ class DAO_UnitTest(unittest.TestCase):
         pass
 
     def test_read_all_ports_from_name(self):
-        pass
+        actual = self.DAO.read_all_ports_from_name("Nyborg")
+        expected = json.dumps(
+            [
+                {"Id": 381,
+                 "Name": "Nyborg",
+                 "Country": "Denmark",
+                 "Latitude": "55.298889",
+                 "Longitude": "10.810833",
+                 "MapView1_Id": 1,
+                 "MapView2_Id": 5331,
+                 "MapView3_Id": 53312},
+                {"Id": 4970,
+                 "Name": "Nyborg",
+                 "Country": "Denmark",
+                 "Latitude": "55.306944",
+                 "Longitude": "10.790833",
+                 "MapView1_Id": 1,
+                 "MapView2_Id": 5331,
+                 "MapView3_Id": 53312}
+            ]
+
+        )
+        self.assertEqual(expected, actual)
 
     def test_read_all_ship_positions_from_tile(self):
         actual = self.DAO.read_all_ship_positions_from_tile(51351)
-        print(actual)
+        # print(actual)
         pass
 
     def test_read_vessel_information_1(self):
@@ -336,6 +358,9 @@ class DAO_UnitTest(unittest.TestCase):
         pass
 
     def test_get_tile_png(self):
+        actual = self.DAO.get_tile_png(1)
+        expected = json.dumps("1010010100111110011111010100101110111000011011101100111")
+        self.assertEqual(expected, actual)
         pass
 
 

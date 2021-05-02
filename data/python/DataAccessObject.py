@@ -279,14 +279,14 @@ class MySQL_DAO:
         SELECT MMSI, MAX(Timestamp) AS Timestamp 
         FROM AIS_MESSAGE, POSITION_REPORT  
         WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id  
+        AND (MapView1_Id={0} OR MapView2_Id={0} OR MapView3_Id={0})
         GROUP BY MMSI;
         
         select ais_message.mmsi, position_report.latitude, position_report.longitude 
         from recent_vessels, ais_message, position_report 
         where recent_vessels.mmsi=ais_message.mmsi 
         and recent_vessels.timestamp=ais_message.timestamp 
-        and ais_message.id=position_report.aismessage_id 
-        and (MapView1_Id={0} or MapView2_Id={0} or MapView3_Id={0});
+        and ais_message.id=position_report.aismessage_id ;
         """.format(tile_id)
 
         ships = None
@@ -318,7 +318,31 @@ class MySQL_DAO:
                 return 1
             return -1
 
-        pass
+        optional_args = ";"
+        optional_args = f" AND Country=\"{country}\"{optional_args}" if country is not None else optional_args
+
+        query = """
+        select Id, Name, Country, Latitude, Longitude, MapView1_Id, MapView2_Id, MapView3_Id 
+        from PORT 
+        where Name=\"{}\" 
+        {}
+        """.format(port_name, optional_args)
+
+        ports = []
+        with MySQLConnectionManager(self.config) as con:
+            cursor = con.cursor()
+            for result in cursor.execute(query, multi=True):
+                if result.with_rows:
+                    ports = result.fetchall()
+
+        port_documents = []
+        if ports:
+            for port in ports:
+                port_documents.append({"Id": port[0], "Name": port[1], "Country": port[2], "Latitude": port[3],
+                                       "Longitude": port[4], "MapView1_Id": port[5], "MapView2_Id": port[6],
+                                       "MapView3_Id": port[7]})
+            return json.dumps(port_documents, default=default)
+        return json.dumps([])
 
     def read_all_ship_positions_from_tile_scale3(self, port_name: str, country: str):
         """
@@ -441,7 +465,22 @@ class MySQL_DAO:
                 return 1
             return -1
 
-        pass
+        query = """
+        SELECT RasterFile 
+        FROM MAP_VIEW 
+        WHERE Id={};
+        """.format(tile_id)
+
+        png_name = None
+        with MySQLConnectionManager(self.config) as con:
+            cursor = con.cursor()
+            for result in cursor.execute(query, multi=True):
+                if result.with_rows:
+                    png_name = result.fetchall()[0][0]
+
+        if png_name:
+            return json.dumps(''.join(format(ord(x), 'b') for x in png_name))
+        return None
 
     @staticmethod
     def _query_not_empty_(query_result):
