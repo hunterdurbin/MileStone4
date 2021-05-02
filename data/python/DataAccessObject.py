@@ -235,7 +235,30 @@ class MySQL_DAO:
                 return 1
             return -1
 
-        pass
+        optional_args = ";"
+        optional_args = f"AND IMO={imo} {optional_args} " if imo is not None else optional_args
+        optional_args = f"AND Name=\"{name}\" {optional_args} " if name is not None else optional_args
+        optional_args = f"AND CallSign=\"{call_sign}\" {optional_args} " if call_sign is not None else optional_args
+
+        query = """
+            SELECT * 
+            FROM VESSEL 
+            WHERE MMSI={} 
+            {}
+        """.format(mmsi, optional_args)
+
+        print(query)
+
+        vessel = None
+        with MySQLConnectionManager(self.config) as con:
+            cursor = con.cursor()
+            for result in cursor.execute(query, multi=True):
+                if result.with_rows:
+                    vessel = result.fetchall()[0]
+
+        return encode(IMO=vessel[0], Flag=vessel[1], Name=vessel[2], Built=vessel[3], CallSign=vessel[4],
+                      Length=vessel[5], Breadth=vessel[6], Tonnage=vessel[7], MMSI=vessel[8], Type=vessel[9],
+                      Status=vessel[10], Owner=vessel[11])
 
     def read_all_ship_positions_from_tile(self, tile_id):
         """
@@ -251,9 +274,34 @@ class MySQL_DAO:
                 return 1
             return -1
 
-        query = """NOT IMPLEMENTED"""
+        query = """
+        CREATE TEMPORARY TABLE RECENT_VESSELS 
+        SELECT MMSI, MAX(Timestamp) AS Timestamp 
+        FROM AIS_MESSAGE, POSITION_REPORT  
+        WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id  
+        GROUP BY MMSI;
+        
+        select ais_message.mmsi, position_report.latitude, position_report.longitude 
+        from recent_vessels, ais_message, position_report 
+        where recent_vessels.mmsi=ais_message.mmsi 
+        and recent_vessels.timestamp=ais_message.timestamp 
+        and ais_message.id=position_report.aismessage_id 
+        and (MapView1_Id={0} or MapView2_Id={0} or MapView3_Id={0});
+        """.format(tile_id)
 
-        pass
+        ships = None
+        with MySQLConnectionManager(self.config) as con:
+            cursor = con.cursor()
+            for result in cursor.execute(query, multi=True):
+                if result.with_rows:
+                    ships = result.fetchall()
+
+        ship_documents = []
+        if ships:
+            for ship in ships:
+                ship_documents.append({"MMSI": ship[0], "lat": ship[1], "long": ship[2]})
+            return json.dumps(ship_documents, default=default)
+        return '[]'
 
     def read_all_ports_from_name(self, port_name: str, country=None):
         """

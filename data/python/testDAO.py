@@ -1,12 +1,10 @@
 import unittest
 from data.python.DataAccessObject import MySQL_DAO
 from data.python.Encoder import *
+import data.python.dbTestSetup
 import json
 
 
-# TODO: test here to see if the correct parameters are defined
-# Think of making an abstract class in Java that GUARANTEES our functions are here
-# We want to cut the dependency from the database when checking the function
 class DAO_Methods_UnitTest(unittest.TestCase):
     DAO: MySQL_DAO = None
 
@@ -219,9 +217,6 @@ class DAO_UnitTest(unittest.TestCase):
         actual = self.DAO.read_all_recent_ship_positions()
         pass
 
-    def test_read_all_ship_positions_from_tile(self):
-        pass
-
     def test_read_last_5_ship_positions_from_mmsi(self):
         actual = self.DAO.read_last_5_ship_positions_from_mmsi(230631000)
         expected = json.dumps(
@@ -258,11 +253,84 @@ class DAO_UnitTest(unittest.TestCase):
     def test_read_all_ports_from_name(self):
         pass
 
-    def test_read_all_ship_positions_from_tile_scale3(self):
+    def test_read_all_ship_positions_from_tile(self):
+        actual = self.DAO.read_all_ship_positions_from_tile(51351)
+        print(actual)
         pass
 
-    def test_read_vessel_information(self):
-        pass
+    def test_read_vessel_information_1(self):
+        actual = self.DAO.read_vessel_information(230631000)
+        expected = json.dumps(
+            {"IMO": 9468920,
+             "Flag": "Finland",
+             "Name": "Finntide",
+             "Built": 2012,
+             "CallSign": None,
+             "Length": 217,
+             "Breadth": 26,
+             "Tonnage": 33816,
+             "MMSI": 230631000,
+             "Type": "Ro-Ro",
+             "Status": "Active",
+             "Owner": "14852"}
+
+        )
+        self.assertEqual(expected, actual)
+
+    def test_read_vessel_information_2(self):
+        actual = self.DAO.read_vessel_information(319904000, name="Montkaj")
+        expected = json.dumps(
+            {"IMO": 1000021,
+             "Flag": "Cayman Islands",
+             "Name": "Montkaj",
+             "Built": 1995,
+             "CallSign": None,
+             "Length": 78,
+             "Breadth": 13,
+             "Tonnage": 2000,
+             "MMSI": 319904000,
+             "Type": "Yacht",
+             "Status": "Active",
+             "Owner": "2"}
+        )
+        self.assertEqual(expected, actual)
+
+    def test_read_vessel_information_3(self):
+        actual = self.DAO.read_vessel_information(440007100, name="Pesquera Hernan Cortes", call_sign="6287207")
+        print(actual)
+        expected = json.dumps(
+            {"IMO": 5275569,
+             "Flag": "Spain",
+             "Name": "Pesquera Hernan Cortes",
+             "Built": 1953,
+             "CallSign": "6287207",
+             "Length": 28,
+             "Breadth": 5,
+             "Tonnage": 145,
+             "MMSI": 440007100,
+             "Type": "Fishing Vessel",
+             "Status": "Active",
+             "Owner": None}
+        )
+        self.assertEqual(expected, actual)
+
+    def test_read_vessel_information_4(self):
+        actual = self.DAO.read_vessel_information(440007100, imo=5275569, call_sign="6287207")
+        expected = json.dumps(
+            {"IMO": 5275569,
+             "Flag": "Spain",
+             "Name": "Pesquera Hernan Cortes",
+             "Built": 1953,
+             "CallSign": "6287207",
+             "Length": 28,
+             "Breadth": 5,
+             "Tonnage": 145,
+             "MMSI": 440007100,
+             "Type": "Fishing Vessel",
+             "Status": "Active",
+             "Owner": None}
+        )
+        self.assertEqual(expected, actual)
 
     def test_find_sub_map_tiles(self):
         pass
