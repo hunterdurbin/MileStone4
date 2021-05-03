@@ -63,3 +63,7 @@ Tests for these functions are created but assert pass only.
 - read_all_ship_positions_from_tile_scale3
 - read_all_ship_positions_to_port
 - read_all_ships_headed_to_port
+
+## Additional Documentation 
+
+You can find more detailed descriptions of the Function and their DocStrings [here]().
