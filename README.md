@@ -6,25 +6,25 @@
 
     1. You will need to download the 'AISTestData_dump.mysql' file and place it in the 'data/sql' directory.
 
-    2. Run the 'quickInstallDatabase.py' for quick install.<br/>    
+    2. Run the 'quickInstallDatabase.py' for quick install.   
 
 ### Manual Installation
 
-    1. Creating the database and the tables:<br/>
+    1. Creating the database and the tables:
     Move to the 'data/sql' directory and run the following commands in powershell or bash.
-    >Windows<br/>
+    **Windows**
     \> Get-Content AISTestDataCreateTables.mysql | mysql -u \<user> -p --password=\<password>
 
-    >Mac<br/>
+    **Mac**
     >$ mysql -u \<user> -p --password=\<password> < AISTestDataCreateTables.mysql
 
     2. Populating the database:<br/>
     Download the 'AISTestData_dump.mysql' (not found in this repository), and move it to the 'data/sql' directory.
     Or just download and move to the directory wherever you saved the file, and then run the following command in powershell or bash.
-    >Windows<br/>
+    **Windows**
     \> Get-Content AISTestData_dump.mysql | mysql -u \<user> -p --password=\<password>
 
-    >MAC<br/>
+    **Mac**
     $ mysql -u \<user> -p --password=\<password> < AISTestData_dump.mysql
 
 **Trouble Shooting**
