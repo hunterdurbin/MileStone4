@@ -211,6 +211,10 @@ class DAO_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_delete_msgs_older_5min(self):
+        """
+
+        """
+        # actual = self.DAO.delete_msgs_older_5min("2020-11-18T00:05:00.000Z")
         pass
 
     def test_read_all_recent_ship_positions(self):
@@ -355,7 +359,32 @@ class DAO_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_find_sub_map_tiles(self):
-        pass
+        actual = self.DAO.find_sub_map_tiles(5531)
+        expected = json.dumps(
+            [
+                {"Id": 55311, "Name": "43G21", "LongitudeW": "12.000000", "LatitudeS": "57.250000",
+                 "LongitudeE": "12.500000", "LatitudeN": "57.500000", "Scale": "3", "RasterFile": "43G21.png",
+                 "ImageWidth": 2000, "ImageHeight": 2000, "ActualLongitudeW": "12.000000", "ActualLatitudeS":
+                     "57.240181", "ActualLongitudeE": "12.500000", "ActualLatitudeN": "57.509749",
+                 "ContainerMapView_Id": 5531},
+                {"Id": 55312, "Name": "43G22", "LongitudeW": "12.500000", "LatitudeS": "57.250000",
+                 "LongitudeE": "13.000000", "LatitudeN": "57.500000", "Scale": "3", "RasterFile": "43G22.png",
+                 "ImageWidth": 2000, "ImageHeight": 2000, "ActualLongitudeW": "12.500000", "ActualLatitudeS":
+                     "57.240181", "ActualLongitudeE": "13.000000", "ActualLatitudeN": "57.509749",
+                 "ContainerMapView_Id": 5531},
+                {"Id": 55313, "Name": "43G23", "LongitudeW": "12.000000", "LatitudeS": "57.000000",
+                 "LongitudeE": "12.500000", "LatitudeN": "57.250000", "Scale": "3", "RasterFile": "43G23.png",
+                 "ImageWidth": 2000, "ImageHeight": 2000, "ActualLongitudeW": "12.000000", "ActualLatitudeS":
+                     "56.989261", "ActualLongitudeE": "12.500000", "ActualLatitudeN": "57.260664",
+                 "ContainerMapView_Id": 5531},
+                {"Id": 55314, "Name": "43G24", "LongitudeW": "12.500000", "LatitudeS": "57.000000",
+                 "LongitudeE": "13.000000", "LatitudeN": "57.250000", "Scale": "3", "RasterFile": "43G24.png",
+                 "ImageWidth": 2000, "ImageHeight": 2000, "ActualLongitudeW": "12.500000", "ActualLatitudeS":
+                     "56.989261", "ActualLongitudeE": "13.000000", "ActualLatitudeN": "57.260664",
+                 "ContainerMapView_Id": 5531}
+            ]
+        )
+        self.assertEqual(expected, actual)
 
     def test_get_tile_png(self):
         actual = self.DAO.get_tile_png(1)

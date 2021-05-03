@@ -1,7 +1,7 @@
 from data.python.mysqlutils import MySQLConnectionManager
 from data.python.Encoder import *
 from data.python.mysqlBuilder import *
-import json, os
+import json, os, datetime
 
 
 #NoahConn Test Push
@@ -129,11 +129,72 @@ class MySQL_DAO:
         """
         Delete all AIS messages whose timestamp is more than 5 minutes older than current time
 
-        :param current_timestamp:
+        :param current_timestamp: Current timestamp in MySQL format, e.g. 2020-11-18 00:05:00,
+        or in python format, e.g. 2020-11-18T00:00:00.000Z
         :returns: Number of deleted AIS messages.
         :return type: json
         """
-        pass
+        if self.is_stub:
+            if type(current_timestamp) == str:
+                if len(current_timestamp) == 24 or len(current_timestamp) == 19:
+                    return 1
+            return -1
+
+        if type(current_timestamp) != str:
+            return -1
+        if len(current_timestamp) != 24 and len(current_timestamp) != 19:
+            return -1
+
+        timestamp = current_timestamp
+        if len(current_timestamp) == 24:
+            timestamp = extract_timestamp(current_timestamp)
+
+        delta = datetime.timedelta(minutes=5)
+        date = datetime.datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
+        timestamp_minus_5_min = date - delta
+
+        query_temp_tables = """
+            CREATE TEMPORARY TABLE OLD_POSITIONS 
+            SELECT AISMessage_Id 
+            FROM POSITION_REPORT, AIS_MESSAGE 
+            WHERE POSITION_REPORT.AISMessage_Id=AIS_MESSAGE.Id 
+            AND Timestamp<="{0}";
+            
+            CREATE TEMPORARY TABLE OLD_STATIC  
+            SELECT AISMessage_Id 
+            FROM STATIC_DATA, AIS_MESSAGE 
+            WHERE STATIC_DATA.AISMessage_Id=AIS_MESSAGE.Id 
+            AND Timestamp<="{0}";
+        """.format(timestamp_minus_5_min)
+
+        query_delete_rows = """
+        DELETE FROM POSITION_REPORT 
+        WHERE AISMessage_Id 
+        IN( SELECT AISMessage_Id FROM OLD_POSITIONS );
+        
+        DELETE FROM AIS_MESSAGE 
+        WHERE Id 
+        IN( SELECT AISMessage_Id FROM OLD_POSITIONS );
+        
+        
+        DELETE FROM STATIC_DATA 
+        WHERE AISMessage_Id 
+        IN( SELECT AISMessage_Id FROM OLD_STATIC );
+        
+        DELETE FROM AIS_MESSAGE 
+        WHERE Id 
+        IN( SELECT AISMessage_Id FROM OLD_STATIC );
+        """
+
+        total_rows_deleted = 0
+        with MySQLConnectionManager(self.config) as con:
+            cursor = con.cursor()
+            for result in cursor.execute(query_temp_tables, multi=True):
+                result.fetchall()
+            for result in cursor.execute(query_delete_rows, multi=True):
+                total_rows_deleted += result.rowcount
+            con.commit()
+        return total_rows_deleted
 
     def read_all_recent_ship_positions(self):
         """
@@ -153,7 +214,7 @@ class MySQL_DAO:
         WHERE AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id  
         GROUP BY MMSI;
 
-        SELECT am.MMSI, pr.latitude, pr.longitude  
+        SELECT AM.MMSI, PR.latitude, PR.longitude  
         FROM AIS_MESSAGE as AM, POSITION_REPORT as PR, recent_vessels as RV  
         WHERE AM.Id=PR.AISMessage_Id  
         AND AM.MMSI=RV.MMSI 
@@ -433,6 +494,8 @@ class MySQL_DAO:
                 return 1
             return -1
 
+
+
         pass
 
     def find_sub_map_tiles(self, tile_id: int):
@@ -449,7 +512,30 @@ class MySQL_DAO:
                 return 1
             return -1
 
-        pass
+        query = """
+        SELECT * 
+        FROM MAP_VIEW 
+        WHERE ContainerMapView_Id={}
+        """.format(tile_id)
+
+        tiles_list_info = []
+        with MySQLConnectionManager(self.config) as con:
+            cursor = con.cursor()
+            for result in cursor.execute(query, multi=True):
+                if result.with_rows:
+                    tiles_list_info = result.fetchall()
+
+        tiles_dicts = []
+        if tiles_list_info:
+            for tile in tiles_list_info:
+                tiles_dicts.append(
+                    {"Id": tile[0], "Name": tile[1], "LongitudeW": tile[2], "LatitudeS": tile[3], "LongitudeE": tile[4],
+                     "LatitudeN": tile[5], "Scale": tile[6], "RasterFile": tile[7], "ImageWidth": tile[8],
+                     "ImageHeight": tile[9], "ActualLongitudeW": tile[10], "ActualLatitudeS": tile[11],
+                     "ActualLongitudeE": tile[12], "ActualLatitudeN": tile[13], "ContainerMapView_Id": tile[14]}
+                )
+            return json.dumps(tiles_dicts, default=default)
+        return json.dumps([])
 
     def get_tile_png(self, tile_id: int):
         """
