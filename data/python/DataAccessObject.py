@@ -1,6 +1,6 @@
-from data.python.mysqlutils import MySQLConnectionManager
-from data.python.Encoder import *
-from data.python.mysqlBuilder import *
+from dependencies.mysqlutils import MySQLConnectionManager
+from dependencies.Encoder import *
+from dependencies.mysqlBuilder import *
 import json, os, datetime
 
 
@@ -130,15 +130,12 @@ class MySQL_DAO:
             return json.dumps(0)
         return json.dumps(1)
 
-    def delete_msgs_older_5min(self, current_timestamp):
+    def delete_msgs_older_5min(self, current_timestamp: str):
         """
         Delete all AIS messages whose timestamp is more than 5 minutes older than current time
 
-        :param current_timestamp: (str) - Current timestamp in MySQL format, e.g. 2020-11-18 00:05:00,
-        or in python format, e.g. 2020-11-18T00:00:00.000Z
-        :returns: Number of deletions. This includes the sum of AIS_MESSAGE
-        along with POSITION_REPORT rows and STATIC_DATA rows.
-        (Basically the return number is double the AIS_MESSAGE rows deleted)
+        :param current_timestamp: (str) - Current timestamp in MySQL format or in python format
+        :returns: Number of deletions. This includes the sum of AIS_MESSAGE along with POSITION_REPORT rows and STATIC_DATA rows. (Basically the return number is double the AIS_MESSAGE rows deleted)
         :return type: json
         """
 

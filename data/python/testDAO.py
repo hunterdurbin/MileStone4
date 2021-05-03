@@ -1,7 +1,7 @@
 import unittest
-from data.python.DataAccessObject import MySQL_DAO
-from data.python.Encoder import *
-import data.python.dbTestSetup
+from DataAccessObject import MySQL_DAO
+from dependencies.Encoder import *
+import dependencies.dbTestSetup
 import json
 
 
@@ -266,12 +266,6 @@ class DAO_Methods_UnitTest(unittest.TestCase):
         """
         result = self.DAO.get_tile_png('347')
         self.assertEqual(-1, result)
-
-
-
-
-
-
 
 
 class DAO_UnitTest(unittest.TestCase):
@@ -705,3 +699,7 @@ class Encoder_UnitTest(unittest.TestCase):
                     'CallSign': 'SBEN', 'Name': 'SOFIA', 'VesselType': 'Cargo', 'Length': 72, 'Breadth': 11,
                     'Draught': 3.7, 'Destination': 'DK VEJ', 'ETA': '2020-11-18 10:00:00'}
         self.assertEqual(expected, actual)
+
+if __name__ == '__main__':
+    unittest.main()
+
