@@ -1,4 +1,3 @@
-from data.python.mysqlutils import MySQLConnectionManager
 import mysql.connector, configparser
 
 
