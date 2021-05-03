@@ -12,19 +12,19 @@
 
     1. Creating the database and the tables:
     Move to the 'data/sql' directory and run the following commands in powershell or bash.
-    **Windows**
+   **Windows**
     \> Get-Content AISTestDataCreateTables.mysql | mysql -u \<user> -p --password=\<password>
 
-    **Mac**
+   **Mac**
     >$ mysql -u \<user> -p --password=\<password> < AISTestDataCreateTables.mysql
 
     2. Populating the database:<br/>
     Download the 'AISTestData_dump.mysql' (not found in this repository), and move it to the 'data/sql' directory.
     Or just download and move to the directory wherever you saved the file, and then run the following command in powershell or bash.
-    **Windows**
+   **Windows**
     \> Get-Content AISTestData_dump.mysql | mysql -u \<user> -p --password=\<password>
 
-    **Mac**
+   **Mac**
     $ mysql -u \<user> -p --password=\<password> < AISTestData_dump.mysql
 
 **Trouble Shooting**
