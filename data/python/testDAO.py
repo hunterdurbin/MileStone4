@@ -291,7 +291,7 @@ class DAO_UnitTest(unittest.TestCase):
                                      '"MsgType":"position_report",'
                                      '"Position":{"type":"Point","coordinates":[55.218332,12.371672]},'
                                      '"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}')
-        expected = 1
+        expected = json.dumps(1)
         self.assertEqual(expected, actual)
 
     # Test static data is inserted correctly
@@ -301,7 +301,7 @@ class DAO_UnitTest(unittest.TestCase):
                                      '"Name":"KATHARINA SCHEPERS","VesselType":"Cargo","CargoTye":'
                                      '"Category X","Length":152,"Breadth":24,"Draught":7.8,"Destination":"NODRM",'
                                      '"ETA":"2020-11-18T09:00:00.000Z","A":143,"B":9,"C":13,"D":11}')
-        expected = 1
+        expected = json.dumps(1)
         self.assertEqual(expected, actual)
 
     # Test if all 9 msgs in the batch are inserted
