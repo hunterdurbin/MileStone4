@@ -229,7 +229,7 @@ class MySQL_DAO:
             iterator = cursor.execute(query, multi=True)
 
             if iterator is None:
-                return '[]'
+                return json.dumps([])
 
             for result in iterator:
                 if result.with_rows:
@@ -239,7 +239,6 @@ class MySQL_DAO:
 
         ship_positions = json.dumps(ship_positions, default=default)
         return ship_positions
-        pass
 
     def read_ship_recent_position_from_mmsi(self, mmsi: int):
         """
@@ -309,8 +308,6 @@ class MySQL_DAO:
             {}
         """.format(mmsi, optional_args)
 
-        print(query)
-
         vessel = None
         with MySQLConnectionManager(self.config) as con:
             cursor = con.cursor()
@@ -363,7 +360,7 @@ class MySQL_DAO:
             for ship in ships:
                 ship_documents.append({"MMSI": ship[0], "lat": ship[1], "long": ship[2]})
             return json.dumps(ship_documents, default=default)
-        return '[]'
+        return json.dumps([])
 
     def read_all_ports_from_name(self, port_name: str, country=None):
         """
@@ -567,13 +564,3 @@ class MySQL_DAO:
             return json.dumps(''.join(format(ord(x), 'b') for x in png_name))
         return None
 
-    @staticmethod
-    def _query_not_empty_(query_result):
-        if str(query_result) == str([]):
-            return False
-        return True
-
-
-# MySQL_DAO().insert_msg(
-#     '{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,"MsgType":"position_report","Position":{"type":"Point","coordinates":[55.218332,13.371672]},"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}'
-#     )

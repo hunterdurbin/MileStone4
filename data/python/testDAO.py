@@ -279,8 +279,10 @@ class DAO_UnitTest(unittest.TestCase):
     def tearDownClass(cls):
         DAO_UnitTest.DAO = None
 
-    # Test position report is inserted correctly
     def test_insert_msg_1(self):
+        """
+        Test function `insert_msg` works properly by inserting 1 position_report msg
+        """
         actual = self.DAO.insert_msg('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,'
                                      '"MsgType":"position_report",'
                                      '"Position":{"type":"Point","coordinates":[55.218332,12.371672]},'
@@ -288,8 +290,10 @@ class DAO_UnitTest(unittest.TestCase):
         expected = json.dumps(1)
         self.assertEqual(expected, actual)
 
-    # Test static data is inserted correctly
     def test_insert_msg_2(self):
+        """
+        Test function `insert_msg` works properly by inserting 1 static_data msg
+        """
         actual = self.DAO.insert_msg('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":210169000,'
                                      '"MsgType":"static_data","IMO":9584865,"CallSign":"5BNZ3",'
                                      '"Name":"KATHARINA SCHEPERS","VesselType":"Cargo","CargoTye":'
@@ -298,8 +302,10 @@ class DAO_UnitTest(unittest.TestCase):
         expected = json.dumps(1)
         self.assertEqual(expected, actual)
 
-    # Test if all 9 msgs in the batch are inserted
     def test_insert_msg_batch_1(self):
+        """
+        Test function `insert_msg_batch` works properly by inserting 9 msgs consisting of static_data and position_report
+        """
         actual = self.DAO.insert_msg_batch([
             {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 304858000,
              "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.218332, 13.371672]},
@@ -332,8 +338,10 @@ class DAO_UnitTest(unittest.TestCase):
         expected = 9
         self.assertEqual(expected, actual)
 
-    # Test if all 5 msgs in the batch are inserted (out of the 9 that are sent)
     def test_insert_msg_batch_2(self):
+        """
+        Test function `insert_msg_batch` works properly by trying to insert 9 msgs consisting of static_data and position_report, but only 5 are valid to insert
+        """
         actual = self.DAO.insert_msg_batch([
             {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 304858000,
              "MsgType": "false_report", "Position": {"type": "Point", "coordinates": [55.218332, 13.371672]},
@@ -393,7 +401,7 @@ class DAO_UnitTest(unittest.TestCase):
 
     def test_read_last_5_ship_positions_from_mmsi(self):
         """
-        Read the last 5 positions for vessel with an MMSI of 230631000
+        Test function `read_last_5_ship_positions_from_mmsi` works by reading the last 5 positions for vessel with an MMSI of230631000
         """
         actual = self.DAO.read_last_5_ship_positions_from_mmsi(230631000)
         expected = json.dumps(
@@ -412,7 +420,7 @@ class DAO_UnitTest(unittest.TestCase):
 
     def test_ship_recent_position_from_mmsi(self):
         """
-        Read the most recent position for the vessel with an MMSI of 230631000
+        Test function `read_last_5_ship_positions_from_mmsi` works by reading the most recent position for the vessel with an MMSI of 230631000
         """
         actual = self.DAO.read_ship_recent_position_from_mmsi(230631000)
         expected = json.dumps(
@@ -432,7 +440,7 @@ class DAO_UnitTest(unittest.TestCase):
 
     def test_read_all_ports_from_name(self):
         """
-        Read the ports matching
+        Test function `read_all_ports_from_name` works properly by querying all ports named 'Nyborg'.
         """
         actual = self.DAO.read_all_ports_from_name("Nyborg")
         expected = json.dumps(
@@ -464,6 +472,9 @@ class DAO_UnitTest(unittest.TestCase):
         pass
 
     def test_read_vessel_information_1(self):
+        """
+        Test function `read_vessel_information` works by reading the vessel document with mmsi of 230631000
+        """
         actual = self.DAO.read_vessel_information(230631000)
         expected = json.dumps(
             {"IMO": 9468920,
@@ -483,6 +494,9 @@ class DAO_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_read_vessel_information_2(self):
+        """
+        Test function `read_vessel_information` works by reading vessel document with mmsi of 319904000 and name of 'Montkaj'.
+        """
         actual = self.DAO.read_vessel_information(319904000, name="Montkaj")
         expected = json.dumps(
             {"IMO": 1000021,
@@ -501,6 +515,9 @@ class DAO_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_read_vessel_information_3(self):
+        """
+        Test function `read_vessel_information` works by reading vessel document with mmsi of 440007100, name of 'Pesquera Hernan Cortes' and call sign of '6287207'.
+        """
         actual = self.DAO.read_vessel_information(440007100, name="Pesquera Hernan Cortes", call_sign="6287207")
         print(actual)
         expected = json.dumps(
@@ -520,6 +537,9 @@ class DAO_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_read_vessel_information_4(self):
+        """
+        Test function `read_vessel_information` works by reading vessel document with mmsi of 440007100, imo of 5275569 and call sign of '6287207'.
+        """
         actual = self.DAO.read_vessel_information(440007100, imo=5275569, call_sign="6287207")
         expected = json.dumps(
             {"IMO": 5275569,
