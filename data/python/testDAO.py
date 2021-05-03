@@ -558,6 +558,9 @@ class DAO_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_find_sub_map_tiles(self):
+        """
+        Test function `find_sub_map` works by finding all of the sub tiles for tile_id=5531
+        """
         actual = self.DAO.find_sub_map_tiles(5531)
         expected = json.dumps(
             [
@@ -586,6 +589,9 @@ class DAO_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_get_tile_png(self):
+        """
+        Test function `get_tile_png` works by querying png file from a tile_id and converting it to binary data
+        """
         actual = self.DAO.get_tile_png(1)
         expected = json.dumps("1010010100111110011111010100101110111000011011101100111")
         self.assertEqual(expected, actual)
