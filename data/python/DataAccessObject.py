@@ -21,14 +21,19 @@ class MySQL_DAO:
         :return type: json
         """
 
-        if self.is_stub:
-            if type(batch) == list:
-                return len(batch)
+        if type(batch) != list:
+            if not self.is_stub:
+                print('Expected \'batch\' to be a list.')
             return -1
 
-        if type(batch) != list:
-            print('Expected \'batch\' to be a list.')
-            return -1
+        for _dict in batch:
+            if type(_dict) != dict:
+                if not self.is_stub:
+                    print('Expected every value in list \'batch\' to be of type \'dict\'.')
+                return -1
+
+        if self.is_stub:
+            return len(batch)
 
         successes = 0
         with MySQLConnectionManager(self.config) as con:
@@ -75,23 +80,23 @@ class MySQL_DAO:
         """
         Insert an AIS message (Position Report or Static Data)
 
-        :param json_data: A single json string of a message to insert
+        :param json_data: (str) - A single json formatted string of a message to insert
         :returns: 1/0 for success/failure upon message insertion.
         :return type: json
         """
 
-        if self.is_stub:
-            if type(json_data) == str:
-                return 1
+        try:
+            msg_content = extract_message(json_data)
+        except Exception as e:
+            if not self.is_stub:
+                print(e)
             return -1
 
-        if type(json_data) != str:
-            print('Expected \'json_data\' to be type str')
-
-        msg_content = extract_message(json_data)
+        if self.is_stub:
+            return 1
 
         if 'MsgType' not in msg_content:
-            return 0
+            return json.dumps(0)  # message was not successfully inserted
 
         ais_keys, ais_values = insert_ais_message_tuple_builder(msg_content)
         query_ais_message = """INSERT INTO AIS_MESSAGE ({})VALUES ({});"""\
@@ -122,23 +127,20 @@ class MySQL_DAO:
                 con.commit()
         except Exception as e:
             print(e)
-            return 0
-        return 1
+            return json.dumps(0)
+        return json.dumps(1)
 
     def delete_msgs_older_5min(self, current_timestamp):
         """
         Delete all AIS messages whose timestamp is more than 5 minutes older than current time
 
-        :param current_timestamp: Current timestamp in MySQL format, e.g. 2020-11-18 00:05:00,
+        :param current_timestamp: (str) - Current timestamp in MySQL format, e.g. 2020-11-18 00:05:00,
         or in python format, e.g. 2020-11-18T00:00:00.000Z
-        :returns: Number of deleted AIS messages.
+        :returns: Number of deletions. This includes the sum of AIS_MESSAGE
+        along with POSITION_REPORT rows and STATIC_DATA rows.
+        (Basically the return number is double the AIS_MESSAGE rows deleted)
         :return type: json
         """
-        if self.is_stub:
-            if type(current_timestamp) == str:
-                if len(current_timestamp) == 24 or len(current_timestamp) == 19:
-                    return 1
-            return -1
 
         if type(current_timestamp) != str:
             return -1
@@ -148,6 +150,9 @@ class MySQL_DAO:
         timestamp = current_timestamp
         if len(current_timestamp) == 24:
             timestamp = extract_timestamp(current_timestamp)
+
+        if self.is_stub:
+            return 1
 
         delta = datetime.timedelta(minutes=5)
         date = datetime.datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
@@ -194,7 +199,7 @@ class MySQL_DAO:
             for result in cursor.execute(query_delete_rows, multi=True):
                 total_rows_deleted += result.rowcount
             con.commit()
-        return total_rows_deleted
+        return json.dumps(total_rows_deleted, default=default)
 
     def read_all_recent_ship_positions(self):
         """
@@ -247,14 +252,11 @@ class MySQL_DAO:
         :returns: Position document of the form {"MMSI": ..., "lat": ..., "long": ..., "IMO": ... }.
         :return type: json
         """
-
-        if self.is_stub:
-            if type(mmsi) == int:
-                return 1
-            return -1
-
         if type(mmsi) != int:
             return -1
+
+        if self.is_stub:
+            return 1
 
         query_pos = "SELECT POSITION_REPORT.Latitude, POSITION_REPORT.Longitude " \
                     "FROM AIS_MESSAGE, POSITION_REPORT " \
@@ -290,11 +292,13 @@ class MySQL_DAO:
         :returns: a Vessel document, with available and/or relevant properties.
         :return type: json
         """
+        if type(mmsi) != int or (imo is not None and type(imo) != int) or (name is not None and type(name) != str) \
+                or (call_sign is not None and type(call_sign) != str):
+            return -1
 
         if self.is_stub:
-            if type(mmsi) == int and (imo is None or type(imo) == int) and (name is None or type(name) == str) and (call_sign is None or type(call_sign) == str):
-                return 1
-            return -1
+            return 1
+
 
         optional_args = ";"
         optional_args = f"AND IMO={imo} {optional_args} " if imo is not None else optional_args
@@ -329,11 +333,11 @@ class MySQL_DAO:
         :returns: Array of ship documents in a json string.
         :return type: json
         """
+        if type(tile_id) != int:
+            return -1
 
         if self.is_stub:
-            if type(tile_id) == int:
-                return 1
-            return -1
+            return 1
 
         query = """
         CREATE TEMPORARY TABLE RECENT_VESSELS 
@@ -373,11 +377,11 @@ class MySQL_DAO:
         :returns: Array of Port documents.
         :return type: json
         """
+        if type(port_name) != str or (type(country) != str and country is not None):
+            return -1
 
         if self.is_stub:
-            if type(port_name) == str and (type(country) == str or country is None):
-                return 1
-            return -1
+            return 1
 
         optional_args = ";"
         optional_args = f" AND Country=\"{country}\"{optional_args}" if country is not None else optional_args
@@ -431,14 +435,11 @@ class MySQL_DAO:
         :returns: Document of the form {MMSI: ..., Positions: [{"lat": ..., "long": ...}, "IMO": ... ]}.
         :return type: json
         """
-
-        if self.is_stub:
-            if type(mmsi) == int:
-                return 1
-            return -1
-
         if type(mmsi) != int:
             return -1
+
+        if self.is_stub:
+            return 1
 
         query_pos = "SELECT POSITION_REPORT.Latitude, POSITION_REPORT.Longitude " \
                     "FROM AIS_MESSAGE, POSITION_REPORT " \
@@ -506,11 +507,12 @@ class MySQL_DAO:
         :returns: Array of map tile description documents.
         :return type: json
         """
+        if type(tile_id) != int:
+            return -1
 
         if self.is_stub:
-            if type(tile_id) == int:
-                return 1
-            return -1
+            return 1
+
 
         query = """
         SELECT * 
@@ -545,11 +547,11 @@ class MySQL_DAO:
         :returns: binary data for the PNG file for the tile_id.
         :return type: json
         """
+        if type(tile_id) != int:
+            return -1
 
         if self.is_stub:
-            if type(tile_id) == int:
-                return 1
-            return -1
+            return 1
 
         query = """
         SELECT RasterFile 

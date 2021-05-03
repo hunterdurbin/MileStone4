@@ -6,6 +6,9 @@ import json
 
 
 class DAO_Methods_UnitTest(unittest.TestCase):
+    """
+    Test methods exist in the DAO and check if the methods take the correct argument types.
+    """
     DAO: MySQL_DAO = None
 
     @classmethod
@@ -16,14 +19,10 @@ class DAO_Methods_UnitTest(unittest.TestCase):
     def tearDownClass(cls):
         DAO_Methods_UnitTest.DAO = None
 
-    def test_insert_msg_interface(self):
-        actual = self.DAO.insert_msg('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,'
-                                     '"MsgType":"position_report",'
-                                     '"Position":{"type":"Point","coordinates":[55.218332,12.371672]},'
-                                     '"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}')
-        self.assertEqual(1, actual)
-
-    def test_insert_msg_batch_interface(self):
+    def test_insert_msg_batch_interface_1(self):
+        """
+        Function `insert_msg_batch` takes an array of dictionaries as an input
+        """
         actual = self.DAO.insert_msg_batch([
             {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 304858000,
              "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.218332, 13.371672]},
@@ -36,80 +35,243 @@ class DAO_Methods_UnitTest(unittest.TestCase):
              "Status": "Under way using engine", "RoT": 0, "SoG": 0, "CoG": 298.7, "Heading": 203},
             {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 257961000,
              "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.00316, 12.809015]},
-             "Status": "Under way using engine", "RoT": 0, "SoG": 0.2, "CoG": 225.6, "Heading": 240},
-            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "AtoN", "MMSI": 992111923, "MsgType": "static_data",
-             "IMO": "Unknown", "Name": "BALTIC2 WINDFARM SW", "VesselType": "Undefined", "Length": 8, "Breadth": 12,
-             "A": 4, "B": 4, "C": 4, "D": 8},
-            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 257385000,
-             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.219403, 13.127725]},
-             "Status": "Under way using engine", "RoT": 25.7, "SoG": 12.3, "CoG": 96.5, "Heading": 101},
-            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 376503000,
-             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [54.519373, 11.47914]},
-             "Status": "Under way using engine", "RoT": 0, "SoG": 7.6, "CoG": 294.4, "Heading": 290},
-            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 229964000,
-             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [54.664513, 13.068712]},
-             "Status": "Under way using engine", "RoT": 0, "SoG": 9.3, "CoG": 68.2, "Heading": 71},
-            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 219570000,
-             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.07848, 12.814233]},
-             "Status": "Under way using engine", "SoG": 0.8, "CoG": 65.8}
+             "Status": "Under way using engine", "RoT": 0, "SoG": 0.2, "CoG": 225.6, "Heading": 240}
         ])
-        batch_len = 9
+        batch_len = 4
         self.assertEqual(batch_len, actual)
 
-    def test_delete_msgs_older_5min_interface(self):
-        pass
+    def test_insert_msg_batch_interface_2(self):
+        """
+        Function `insert_msg_batch` fails nicely if input is not array
+        """
+        actual = self.DAO.insert_msg_batch(
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 304858000,
+             "MsgType": "position_report",
+             "Position": {"type": "Point", "coordinates": [55.218332, 13.371672]},
+             "Status": "Under way using engine", "SoG": 10.8, "CoG": 94.3, "Heading": 97}
+        )
+        expected = -1
+        self.assertEqual(expected, actual)
 
-    def test_read_all_recent_ship_positions(self):
+    def test_insert_msg_batch_interface_3(self):
+        """
+        Function `insert_msg_batch` fails nicely if contents of array aren't all dictionaries
+        """
+        actual = self.DAO.insert_msg_batch([
+            {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 304858000,
+             "MsgType": "position_report", "Position": {"type": "Point", "coordinates": [55.218332, 13.371672]},
+             "Status": "Under way using engine", "SoG": 10.8, "CoG": 94.3, "Heading": 97},
+            'Vessel'
+        ])
+        expected = -1
+        self.assertEqual(expected, actual)
+
+    def test_insert_msg_interface_1(self):
+        """
+        Function `insert_msg` takes a string as input
+        """
+        actual = self.DAO.insert_msg('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,'
+                                     '"MsgType":"position_report",'
+                                     '"Position":{"type":"Point","coordinates":[55.218332,12.371672]},'
+                                     '"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}')
+        self.assertEqual(1, actual)
+
+    def test_insert_msg_interface_2(self):
+        """
+        Function `insert_msg` fails nicely if input is not a str
+        """
+        actual = self.DAO.insert_msg(3)
+        self.assertEqual(-1, actual)
+
+    def test_delete_msgs_older_5min_interface_1(self):
+        """
+        Function `delete_msgs_older_5min` takes MySQL formatted str as input
+        """
+        actual = self.DAO.delete_msgs_older_5min("2020-11-18 00:00:00")
+        expected = 1
+        self.assertEqual(expected, actual)
+
+    def test_delete_msgs_older_5min_interface_2(self):
+        """
+        Function `delete_msgs_older_5min` takes Python formatted str as input
+        """
+        actual = self.DAO.delete_msgs_older_5min("2020-11-18T00:00:00.000Z")
+        expected = 1
+        self.assertEqual(expected, actual)
+
+    def test_delete_msgs_older_5min_interface_3(self):
+        """
+        Function `delete_msgs_older_5min` fails nicely if input is not formatted correctly
+        """
+        actual = self.DAO.delete_msgs_older_5min("2020-11-18 00:00:00.000")
+        expected = -1
+        self.assertEqual(expected, actual)
+
+    def test_delete_msgs_older_5min_interface_4(self):
+        """
+        Function `delete_msgs_older_5min` fails nicely if input is not str
+        """
+        actual = self.DAO.delete_msgs_older_5min(2020-11-18)
+        expected = -1
+        self.assertEqual(expected, actual)
+
+    def test_read_all_recent_ship_positions_interface_1(self):
+        """
+        Function `read_all_recent_ship_positions` exists
+        """
         actual = self.DAO.read_all_recent_ship_positions()
         self.assertEqual(1, actual)
 
-    def test_read_all_ship_positions_from_tile_interface(self):
+    def test_read_ship_recent_position_from_mmsi_interface_1(self):
+        """
+        Function `read_ship_recent_position_from_mmsi` takes int as input
+        """
+        result = self.DAO.read_ship_recent_position_from_mmsi(123456789)
+        self.assertEqual(1, result)
+
+    def test_read_ship_recent_position_from_mmsi_interface_2(self):
+        """
+        Function `read_ship_recent_position_from_mmsi` fails nicely if input is not int
+        """
+        result = self.DAO.read_ship_recent_position_from_mmsi("123456789")
+        self.assertEqual(-1, result)
+
+    def test_read_vessel_information_interface_1(self):
+        """
+        Function `read_vessel_information` takes int as the only input
+        """
+        result = self.DAO.read_vessel_information(123456789)
+        self.assertEqual(1, result)
+
+    def test_read_vessel_information_interface_2(self):
+        """
+        Function `read_vessel_information` takes mmsi as int, imo as int, name as str, and call_sign as str
+        """
+        result = self.DAO.read_vessel_information(123456789, 48912, 'Ever Given', 'EVGI')
+        self.assertEqual(1, result)
+
+    def test_read_vessel_information_interface_3(self):
+        """
+        Function `read_vessel_information` fails nicely if mmsi is not an int
+        """
+        result = self.DAO.read_vessel_information('123456789', 48912, 'Ever Given', 'EVGI')
+        self.assertEqual(-1, result)
+
+    def test_read_vessel_information_interface_4(self):
+        """
+        Function `read_vessel_information` fails nicely if imo is not an int
+        """
+        result = self.DAO.read_vessel_information(123456789, '48912', 'Ever Given', 'EVGI')
+        self.assertEqual(-1, result)
+
+    def test_read_vessel_information_interface_5(self):
+        """
+        Function `read_vessel_information` fails nicely if call_sign is not str
+        """
+        result = self.DAO.read_vessel_information(123456789, 48912, 'Ever Given', 3452)
+        self.assertEqual(-1, result)
+
+    def test_read_all_ship_positions_from_tile_interface_1(self):
+        """
+        Function `read_all_ship_positions_from_tile` takes int as input
+        """
         result = self.DAO.read_all_ship_positions_from_tile(81293)
         self.assertEqual(1, result)
 
-    def test_read_last_5_ship_positions_from_mmsi_interface(self):
+    def test_read_all_ship_positions_from_tile_interface_2(self):
+        """
+        Function `read_all_ship_positions_from_tile` fails nicely if input is not an int
+        """
+        result = self.DAO.read_all_ship_positions_from_tile('81293')
+        self.assertEqual(-1, result)
+
+    def test_read_all_ports_from_name_interface_1(self):
+        """
+        Function `read_all_ports_from_name` takes only one input as a str
+        """
+        result = self.DAO.read_all_ports_from_name('PRT')
+        self.assertEqual(1, result)
+
+    def test_read_all_ports_from_name_interface_2(self):
+        """
+        Function `read_all_ports_from_name` takes two inputs, which are both type str
+        """
+        result = self.DAO.read_all_ports_from_name('PRT', 'USA')
+        self.assertEqual(1, result)
+
+    def test_read_all_ports_from_name_interface_3(self):
+        """
+        Function `read_all_ports_from_name` fails nicely if first input is not str
+        """
+        result = self.DAO.read_all_ports_from_name(123)
+        self.assertEqual(-1, result)
+
+    def test_read_all_ports_from_name_interface_4(self):
+        """
+        Function `read_all_ports_from_name` fails nicely if first input is str, but second input is not str
+        """
+        result = self.DAO.read_all_ports_from_name('PRT', 123)
+        self.assertEqual(-1, result)
+
+    def test_read_all_ship_positions_from_tile_scale3_interface___(self):
+        result = self.DAO.read_all_ship_positions_from_tile_scale3('PRT', 'USA')
+        self.assertEqual(1, result)
+
+    def test_read_last_5_ship_positions_from_mmsi_interface_1(self):
+        """
+        Function `read_last_5_ship_positions_from_mmsi` takes int as only input
+        """
         result = self.DAO.read_last_5_ship_positions_from_mmsi(123456789)
         self.assertEqual(1, result)
 
-    def test_read_ship_recent_position_from_mmsi_interface(self):
-        result = self.DAO.read_ship_recent_position_from_mmsi(123456789)
-        self.assertEqual(1, result)
+    def test_read_last_5_ship_positions_from_mmsi_interface_2(self):
+        """
+        Function `read_last_5_ship_positions_from_mmsi` fails nicely if input is not int
+        """
+        result = self.DAO.read_last_5_ship_positions_from_mmsi('123456789')
+        self.assertEqual(-1, result)
 
     def test_read_all_ship_positions_to_port_interface(self):
         result = self.DAO.read_all_ship_positions_to_port(412)
         self.assertEqual(1, result)
 
-    def test_read_all_ships_headed_to_port_interface(self):
+    def test_read_all_ships_headed_to_port_interface____(self):
         result = self.DAO.read_all_ships_headed_to_port('PRT', 'USA')
         self.assertEqual(1, result)
 
-    def test_read_all_ports_from_name_1_interface(self):
-        result = self.DAO.read_all_ports_from_name('PRT')
-        self.assertEqual(1, result)
-
-    def test_read_all_ports_from_name_2_interface(self):
-        result = self.DAO.read_all_ports_from_name('PRT', 'USA')
-        self.assertEqual(1, result)
-
-    def test_read_all_ship_positions_from_tile_scale3_interface(self):
-        result = self.DAO.read_all_ship_positions_from_tile_scale3('PRT', 'USA')
-        self.assertEqual(1, result)
-
-    def test_read_vessel_information_1_interface(self):
-        result = self.DAO.read_vessel_information(123456789)
-        self.assertEqual(1, result)
-
-    def test_read_vessel_information_2_interface(self):
-        result = self.DAO.read_vessel_information(123456789, 48912, 'Ever Given', 'EVGI')
-        self.assertEqual(1, result)
-
-    def test_find_sub_map_tiles_interface(self):
+    def test_find_sub_map_tiles_interface_1(self):
+        """
+        Function `find_sub_map_tiles` takes int as input
+        """
         result = self.DAO.find_sub_map_tiles(347)
         self.assertEqual(1, result)
 
-    def test_get_tile_png_interface(self):
+    def test_find_sub_map_tiles_interface_2(self):
+        """
+        Function `find_sub_map_tiles` fails nicely if input is not int
+        """
+        result = self.DAO.find_sub_map_tiles('347')
+        self.assertEqual(-1, result)
+
+    def test_get_tile_png_interface_1(self):
+        """
+        Function `get_tile_png` takes int as input
+        """
         result = self.DAO.get_tile_png(347)
         self.assertEqual(1, result)
+
+    def test_get_tile_png_interface_2(self):
+        """
+        Function `get_tile_png` fails nicely if input is not int
+        """
+        result = self.DAO.get_tile_png('347')
+        self.assertEqual(-1, result)
+
+
+
+
+
+
 
 
 class DAO_UnitTest(unittest.TestCase):
@@ -212,9 +374,23 @@ class DAO_UnitTest(unittest.TestCase):
 
     def test_delete_msgs_older_5min(self):
         """
+        Delete msgs from the first 3 minutes (incrementally)
+        Deletes msgs older than or equal to 2020-11-18 00:00:00,
+        then older than or equal to 2020-11-18T00:00:01.000Z,
+        then older than or equal to 2020-11-18 00:02:00,
+        finally older than or equal to 2020-11-18T00:00:03.000Z.
 
+        There are 4 assertions in here. I did not know how to make an incrementing test of this delete method
+        using multiple methods.
         """
-        # actual = self.DAO.delete_msgs_older_5min("2020-11-18T00:05:00.000Z")
+        actual_zero_minute = self.DAO.delete_msgs_older_5min("2020-11-18 00:05:00")
+        actual_first_minute = self.DAO.delete_msgs_older_5min("2020-11-18T00:06:00.000Z")
+        actual_second_minute = self.DAO.delete_msgs_older_5min("2020-11-18 00:07:00")
+        actual_third_minute = self.DAO.delete_msgs_older_5min("2020-11-18T00:08:00.000Z")
+        self.assertEqual(json.dumps(252), actual_zero_minute)
+        self.assertEqual(json.dumps(12736), actual_first_minute)
+        self.assertEqual(json.dumps(12804), actual_second_minute)
+        self.assertEqual(json.dumps(12808), actual_third_minute)
         pass
 
     def test_read_all_recent_ship_positions(self):
@@ -222,6 +398,9 @@ class DAO_UnitTest(unittest.TestCase):
         pass
 
     def test_read_last_5_ship_positions_from_mmsi(self):
+        """
+        Read the last 5 positions for vessel with an MMSI of 230631000
+        """
         actual = self.DAO.read_last_5_ship_positions_from_mmsi(230631000)
         expected = json.dumps(
             {"MMSI": 230631000,
@@ -238,6 +417,9 @@ class DAO_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_ship_recent_position_from_mmsi(self):
+        """
+        Read the most recent position for the vessel with an MMSI of 230631000
+        """
         actual = self.DAO.read_ship_recent_position_from_mmsi(230631000)
         expected = json.dumps(
             {
@@ -255,6 +437,9 @@ class DAO_UnitTest(unittest.TestCase):
         pass
 
     def test_read_all_ports_from_name(self):
+        """
+        Read the ports matching
+        """
         actual = self.DAO.read_all_ports_from_name("Nyborg")
         expected = json.dumps(
             [
