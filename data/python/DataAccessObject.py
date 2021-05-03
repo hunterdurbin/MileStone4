@@ -244,7 +244,7 @@ class MySQL_DAO:
         """
         Read current position of given MMSI.
 
-        :param mmsi: A ship's mmsi
+        :param mmsi: (int) - mmsi of a vessel
         :returns: Position document of the form {"MMSI": ..., "lat": ..., "long": ..., "IMO": ... }.
         :return type: json
         """
@@ -281,10 +281,10 @@ class MySQL_DAO:
         Read permanent or transient vessel information matching the given MMSI, and 0 or more additional criteria:
         IMO, Name, CallSign
 
-        :param mmsi: (int)
-        :param imo: (int) - (optional)
-        :param name: (str) - (optional)
-        :param call_sign: (str) - (optional)
+        :param mmsi: (int) - mmsi of the vessel
+        :param imo: (optional, int) - imo of the vessel
+        :param name: (optional, int) - name of the vessel
+        :param call_sign: ((optional, int) - call sign of the vessel
         :returns: a Vessel document, with available and/or relevant properties.
         :return type: json
         """
@@ -323,7 +323,7 @@ class MySQL_DAO:
         """
         Read all most recent ship positions in the given tile.
 
-        :param tile_id:
+        :param tile_id: (int) - id of the tile searching in
         :returns: Array of ship documents in a json string.
         :return type: json
         """
@@ -366,8 +366,8 @@ class MySQL_DAO:
         """
         Read all ports matching the given name and (optional) country.
 
-        :param port_name:
-        :param country:
+        :param port_name: (str) - name of the port desired
+        :param country: (optional, str) - country name of the port
         :returns: Array of Port documents.
         :return type: json
         """
@@ -407,8 +407,8 @@ class MySQL_DAO:
         """
         Read all ship positions in the tile of scale 3 containing the given port.
 
-        :param port_name:
-        :param country:
+        :param port_name: (str) - name of the port a ship is heading to
+        :param country: (str) - name of the country the port is in
         :returns: If unique matching port: Array of Position documents (see above).
                     Otherwise: an Array of Port documents.
         :return type: json
@@ -425,7 +425,7 @@ class MySQL_DAO:
         """
         Read last 5 positions of given MMSI.
 
-        :param mmsi: A ship's mmsi
+        :param mmsi: (int) - A ship's mmsi
         :returns: Document of the form {MMSI: ..., Positions: [{"lat": ..., "long": ...}, "IMO": ... ]}.
         :return type: json
         """
@@ -460,7 +460,7 @@ class MySQL_DAO:
         """
         Read most recent positions of ships headed to port with given Id
 
-        :param port_id:
+        :param port_id: (int) - the port id of a desired port
         :return: Array of position documents of the form {"MMSI": ..., "lat": ..., "long": ..., "IMO": ...}.
         :return type: json
         """
@@ -476,12 +476,12 @@ class MySQL_DAO:
         """
         Read all positions of ships headed to given port (as read from static data, or user input).
 
-        :param port_name:
-        :param country:
+        :param port_name: (str) - name of a port
+        :param country: (str) - name of the country the port is in
         :returns: If unique matching port: array of of Position documents of the form
                     {"MMSI": ..., "lat": ..., "long": ..., "IMO": ...}.
                     Otherwise: an Array of Port documents.
-        :return type:
+        :return type: json
         """
 
         if self.is_stub:
@@ -497,7 +497,7 @@ class MySQL_DAO:
         """
         Given a background map tile for zoom level 1 (2), find the 4 tiles of zoom level 2 (3) that are contained in it.
 
-        :param tile_id:
+        :param tile_id: (int) - tile id of a parent tile.
         :returns: Array of map tile description documents.
         :return type: json
         """
@@ -537,7 +537,7 @@ class MySQL_DAO:
         """
         Given a tile Id, get the actual tile (a PNG file).
 
-        :param tile_id:
+        :param tile_id: (int) - tile id
         :returns: binary data for the PNG file for the tile_id.
         :return type: json
         """
