@@ -2,6 +2,10 @@
 
 ## Database Installation
 
+### Connection Data Configuration
+
+    1. In the file 'milestone4/data/sql/connection_data.conf' edit the username and password to match your sql profile.
+
 ### Quick Installation
 
     1. You will need to download the 'AISTestData_dump.mysql' file and place it in the 'data/sql' directory.
