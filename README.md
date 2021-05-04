@@ -38,7 +38,7 @@
 
 ## Testing
 
-    1. Ensure the data base is unaltered. If you just installed the database, it will be ready to run tests. If you have ran the tests, you will need to reinitialize the database before running the tests again.
+    1. Ensure the data base is unaltered. If you just installed the database, it will be ready to run tests. If you have ran the tests, you will need to reinitialize the database before running the tests again. In the case of running the tests without reinitializing the database, there will be one failed test for delete_msgs_older_5min.
 
     2. Navigate to 'milestone4/data/python' folder
 
@@ -68,4 +68,4 @@ Integreation tests for these functions are created but assert True.
 
 ## Additional Documentation 
 
-You can find more detailed descriptions of the Function and their DocStrings [here]().
+You can find more detailed descriptions of the functions and their docstrings [here]().
