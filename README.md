@@ -38,13 +38,15 @@
 
 ## Testing
 
-    1. Navigate to 'milestone4/data/python' folder
+    1. Ensure the data base is unaltered. If you just installed the database, it will be ready to run tests. If you have ran the tests, you will need to reinitialize the database before running the tests again.
 
-    2. Run the 'testDAO.py'
+    2. Navigate to 'milestone4/data/python' folder
 
-    3. The testDAO.py will reinitialize the database before testing, but DOES NOT reinitialize after the completion of tests.
+    3. Run the 'testDAO.py'
 
-    (It is recommended that you reinitialize the database before executing individual functions to ensure you have an unaltered data set.)
+    4. The testDAO.py DOES NOT reinitialize the database before or after testing.
+
+    5. Reinitialize the database before executing individual functions to ensure you have an unaltered data set.
 
 **Trouble Shooting**
 
