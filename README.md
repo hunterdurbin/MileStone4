@@ -6,7 +6,9 @@
 
     1. You will need to download the 'AISTestData_dump.mysql' file and place it in the 'data/sql' directory.
 
-    2. Run the 'quickInstallDatabase.py' for quick install.   
+    2. Run the 'quickInstallDatabase.py' for quick install.  
+
+    3. Tables must be populated for the tests to work; when prompted, respond 'y' to ensure the tables are populated.
 
 ### Manual Installation
 
