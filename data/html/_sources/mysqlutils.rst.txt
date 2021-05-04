@@ -1,0 +1,7 @@
+mysqlutils module
+=================
+
+.. automodule:: mysqlutils
+   :members:
+   :undoc-members:
+   :show-inheritance:

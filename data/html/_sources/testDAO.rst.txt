@@ -1,0 +1,8 @@
+testDAO module
+==============
+
+.. automodule:: testDAO
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

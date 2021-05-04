@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Encoder module &mdash; MileStone4  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="mysqlBuilder module" href="mysqlBuilder.html" />
+    <link rel="prev" title="dependencies" href="dependencies.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> MileStone4
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">python</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="DataAccessObject.html">DataAccessObject module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testDAO.html">testDAO module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="dependencies.html">dependencies</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Encoder module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mysqlBuilder.html">mysqlBuilder module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mysqlutils.html">mysqlutils module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MileStone4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">python</a> &raquo;</li>
+        
+          <li><a href="dependencies.html">dependencies</a> &raquo;</li>
+        
+      <li>Encoder module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Encoder.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-Encoder">
+<span id="encoder-module"></span><h1>Encoder module<a class="headerlink" href="#module-Encoder" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="Encoder.decode">
+<code class="sig-prename descclassname">Encoder.</code><code class="sig-name descname">decode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json_doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Encoder.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a document into a python dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>json_doc</strong> – (str) - a string format of a json document</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>python dictionary</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Encoder.default">
+<code class="sig-prename descclassname">Encoder.</code><code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">o</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Encoder.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper method used for json.dumps function</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Encoder.encode">
+<code class="sig-prename descclassname">Encoder.</code><code class="sig-name descname">encode</code><span class="sig-paren">(</span><em class="sig-param">**{foo: 14</em>, <em class="sig-param">bar: 94}</em><span class="sig-paren">)</span> &#x2192; {foo: 14, bar: 94}<a class="headerlink" href="#Encoder.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>encode(foo=14, bar=94) -&gt; {foo: 14, bar: 94}</p>
+<p>Note that specified order permutation may not apply since dictionary ordering is not guaranteed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>document containing the kwargs</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Encoder.extract_message">
+<code class="sig-prename descclassname">Encoder.</code><code class="sig-name descname">extract_message</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json_doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Encoder.extract_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts an AIS message. Can either pass a static message or position report.
+If a position report is passed, return value is that of the function ‘extract_message_position()’
+If static data is passed, return value is that of the function ‘extract_message_static()’
+If the message type is neither of the above, an empty dictionary will be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>json_doc</strong> – Static data json or Position report json</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary containing the static data, position report, or an empty dict</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Encoder.extract_message_position">
+<code class="sig-prename descclassname">Encoder.</code><code class="sig-name descname">extract_message_position</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos_report</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Encoder.extract_message_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a raw position report as a dictionary, a dictionary of correctly parsed data
+will be returned.
+The format will be that of:
+{‘MMSI’: …, ‘Timestamp’: …, ‘Class’: …, ‘Latitude’: …, ‘Longitude’:…,
+‘Status: …, ‘RoT’: …, ‘SoG’: …, ‘CoG’: …, ‘Heading’: …}
+If a key is not present in the pos_report, the key-value will not be returned in the resulting dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pos_report</strong> – (dict) - position report dictionary</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>parsed position report dictionary</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Encoder.extract_message_static">
+<code class="sig-prename descclassname">Encoder.</code><code class="sig-name descname">extract_message_static</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">static_report</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Encoder.extract_message_static" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a raw static data report as a dictionary, a dictionary of correctly parsed data
+will be returned.
+The format will be that of:
+{‘MMSI’: …, ‘IMO’: …, ‘Timestamp’: …, ‘Class’: …, ‘CallSign’: …,
+‘Name’: …, ‘VesselType’: …, ‘CargoType’: …, ‘Length’: …, ‘Breadth’: …,
+‘Destination’: …, ‘ETA’: …}
+If a key is not present in the pos_report, the key-value will not be returned in the resulting dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>static_report</strong> – (dict) - static data dictionary</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>parsed static data report dictionary</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Encoder.extract_timestamp">
+<code class="sig-prename descclassname">Encoder.</code><code class="sig-name descname">extract_timestamp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timestamp_raw</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Encoder.extract_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a raw timestamp, e.g. “2020-11-18T00:00:00.000Z”
+and returns a MySQL formatted timestamp, e.g. “2020-11-18 00:00:00”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>timestamp_raw</strong> – (str) - raw timestamp from ais messages</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a MySQL formatted timestamp</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="mysqlBuilder.html" class="btn btn-neutral float-right" title="mysqlBuilder module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="dependencies.html" class="btn btn-neutral float-left" title="dependencies" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Hunter Durbin, Noah Connolly, Cam Tharp
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

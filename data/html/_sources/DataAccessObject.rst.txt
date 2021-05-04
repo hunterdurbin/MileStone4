@@ -1,0 +1,8 @@
+DataAccessObject module
+=======================
+
+.. automodule:: DataAccessObject
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

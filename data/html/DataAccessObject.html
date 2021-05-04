@@ -1,0 +1,482 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DataAccessObject module &mdash; MileStone4  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="testDAO module" href="testDAO.html" />
+    <link rel="prev" title="python" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> MileStone4
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">python</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DataAccessObject module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testDAO.html">testDAO module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html">dependencies</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MileStone4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">python</a> &raquo;</li>
+        
+      <li>DataAccessObject module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/DataAccessObject.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-DataAccessObject">
+<span id="dataaccessobject-module"></span><h1>DataAccessObject module<a class="headerlink" href="#module-DataAccessObject" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="DataAccessObject.MySQL_DAO">
+<em class="property">class </em><code class="sig-prename descclassname">DataAccessObject.</code><code class="sig-name descname">MySQL_DAO</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stub</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.delete_msgs_older_5min">
+<code class="sig-name descname">delete_msgs_older_5min</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_timestamp</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.delete_msgs_older_5min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all AIS messages whose timestamp is more than 5 minutes older than current time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>current_timestamp</strong> – (str) - Current timestamp in MySQL format or in python format</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of deletions. This includes the sum of AIS_MESSAGE along with POSITION_REPORT rows and STATIC_DATA rows. (Basically the return number is double the AIS_MESSAGE rows deleted)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.find_sub_map_tiles">
+<code class="sig-name descname">find_sub_map_tiles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.find_sub_map_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a background map tile for zoom level 1 (2), find the 4 tiles of zoom level 2 (3) that are contained in it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tile_id</strong> – (int) - tile id of a parent tile.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of map tile description documents.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.get_tile_png">
+<code class="sig-name descname">get_tile_png</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.get_tile_png" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a tile Id, get the actual tile (a PNG file).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tile_id</strong> – (int) - tile id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>binary data for the PNG file for the tile_id.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.insert_msg">
+<code class="sig-name descname">insert_msg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json_data</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.insert_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert an AIS message (Position Report or Static Data)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>json_data</strong> – (str) - A single json formatted string of a message to insert</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>1/0 for success/failure upon message insertion.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.insert_msg_batch">
+<code class="sig-name descname">insert_msg_batch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">batch</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.insert_msg_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a batch of AIS messages (Static Data and/or Position Reports)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>batch</strong> – A list of dictionary AIS messages to insert</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of insertions made.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.read_all_ports_from_name">
+<code class="sig-name descname">read_all_ports_from_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">port_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">country</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.read_all_ports_from_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read all ports matching the given name and (optional) country.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port_name</strong> – (str) - name of the port desired</p></li>
+<li><p><strong>country</strong> – (optional, str) - country name of the port</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of Port documents.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.read_all_recent_ship_positions">
+<code class="sig-name descname">read_all_recent_ship_positions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.read_all_recent_ship_positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read all most recent ship positions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Array of ship documents as json files</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.read_all_ship_positions_from_tile">
+<code class="sig-name descname">read_all_ship_positions_from_tile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.read_all_ship_positions_from_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read all most recent ship positions in the given tile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tile_id</strong> – (int) - id of the tile searching in</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of ship documents in a json string.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.read_all_ship_positions_from_tile_scale3">
+<code class="sig-name descname">read_all_ship_positions_from_tile_scale3</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">port_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">country</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.read_all_ship_positions_from_tile_scale3" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Unfinished Implementation</strong>. <strong>Interface test are created and pass</strong></p>
+<p>Read all ship positions in the tile of scale 3 containing the given port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port_name</strong> – (str) - name of the port a ship is heading to</p></li>
+<li><p><strong>country</strong> – (str) - name of the country the port is in</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If unique matching port: Array of Position documents (see above).
+Otherwise: an Array of Port documents.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.read_all_ship_positions_to_port">
+<code class="sig-name descname">read_all_ship_positions_to_port</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">port_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.read_all_ship_positions_to_port" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Unfinished Implementation</strong>. <strong>Interface test are created and pass</strong></p>
+<p>Read most recent positions of ships headed to port with given Id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>port_id</strong> – (int) - the port id of a desired port</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of position documents of the form {“MMSI”: …, “lat”: …, “long”: …, “IMO”: …}.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.read_all_ships_headed_to_port">
+<code class="sig-name descname">read_all_ships_headed_to_port</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">port_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">country</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.read_all_ships_headed_to_port" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Unfinished Implementation</strong>. <strong>Interface test are created and pass</strong></p>
+<p>Read all positions of ships headed to given port (as read from static data, or user input).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port_name</strong> – (str) - name of a port</p></li>
+<li><p><strong>country</strong> – (str) - name of the country the port is in</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If unique matching port: array of of Position documents of the form
+{“MMSI”: …, “lat”: …, “long”: …, “IMO”: …}.
+Otherwise: an Array of Port documents.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.read_last_5_ship_positions_from_mmsi">
+<code class="sig-name descname">read_last_5_ship_positions_from_mmsi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mmsi</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.read_last_5_ship_positions_from_mmsi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read last 5 positions of given MMSI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mmsi</strong> – (int) - A ship’s mmsi</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Document of the form {MMSI: …, Positions: [{“lat”: …, “long”: …}, “IMO”: … ]}.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.read_ship_recent_position_from_mmsi">
+<code class="sig-name descname">read_ship_recent_position_from_mmsi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mmsi</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.read_ship_recent_position_from_mmsi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read current position of given MMSI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mmsi</strong> – (int) - mmsi of a vessel</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Position document of the form {“MMSI”: …, “lat”: …, “long”: …, “IMO”: … }.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="DataAccessObject.MySQL_DAO.read_vessel_information">
+<code class="sig-name descname">read_vessel_information</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mmsi</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">imo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">call_sign</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataAccessObject.MySQL_DAO.read_vessel_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read permanent or transient vessel information matching the given MMSI, and 0 or more additional criteria:
+IMO, Name, CallSign</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mmsi</strong> – (int) - mmsi of the vessel</p></li>
+<li><p><strong>imo</strong> – (optional, int) - imo of the vessel</p></li>
+<li><p><strong>name</strong> – (optional, int) - name of the vessel</p></li>
+<li><p><strong>call_sign</strong> – ((optional, int) - call sign of the vessel</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Vessel document, with available and/or relevant properties.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="testDAO.html" class="btn btn-neutral float-right" title="testDAO module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Hunter Durbin, Noah Connolly, Cam Tharp
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,690 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>testDAO module &mdash; MileStone4  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="dependencies" href="dependencies.html" />
+    <link rel="prev" title="DataAccessObject module" href="DataAccessObject.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> MileStone4
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">python</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="DataAccessObject.html">DataAccessObject module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">testDAO module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html">dependencies</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MileStone4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">python</a> &raquo;</li>
+        
+      <li>testDAO module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/testDAO.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-testDAO">
+<span id="testdao-module"></span><h1>testDAO module<a class="headerlink" href="#module-testDAO" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="testDAO.DAO_Methods_UnitTest">
+<em class="property">class </em><code class="sig-prename descclassname">testDAO.</code><code class="sig-name descname">DAO_Methods_UnitTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>Test methods exist in the DAO and check if the methods take the correct argument types.</p>
+<dl class="py attribute">
+<dt id="testDAO.DAO_Methods_UnitTest.DAO">
+<code class="sig-name descname">DAO</code><em class="property">: <a class="reference internal" href="DataAccessObject.html#DataAccessObject.MySQL_DAO" title="DataAccessObject.MySQL_DAO">DataAccessObject.MySQL_DAO</a></em><em class="property"> = None</em><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.DAO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.setUpClass">
+<em class="property">classmethod </em><code class="sig-name descname">setUpClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up class fixture before running tests in the class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.tearDownClass">
+<em class="property">classmethod </em><code class="sig-name descname">tearDownClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.tearDownClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for deconstructing the class fixture after running all tests in the class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_delete_msgs_older_5min_interface_1">
+<code class="sig-name descname">test_delete_msgs_older_5min_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_delete_msgs_older_5min_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>delete_msgs_older_5min</cite> takes MySQL formatted str as input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_delete_msgs_older_5min_interface_2">
+<code class="sig-name descname">test_delete_msgs_older_5min_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_delete_msgs_older_5min_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>delete_msgs_older_5min</cite> takes Python formatted str as input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_delete_msgs_older_5min_interface_3">
+<code class="sig-name descname">test_delete_msgs_older_5min_interface_3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_delete_msgs_older_5min_interface_3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>delete_msgs_older_5min</cite> fails nicely if input is not formatted correctly</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_delete_msgs_older_5min_interface_4">
+<code class="sig-name descname">test_delete_msgs_older_5min_interface_4</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_delete_msgs_older_5min_interface_4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>delete_msgs_older_5min</cite> fails nicely if input is not str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_find_sub_map_tiles_interface_1">
+<code class="sig-name descname">test_find_sub_map_tiles_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_find_sub_map_tiles_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>find_sub_map_tiles</cite> takes int as input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_find_sub_map_tiles_interface_2">
+<code class="sig-name descname">test_find_sub_map_tiles_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_find_sub_map_tiles_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>find_sub_map_tiles</cite> fails nicely if input is not int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_get_tile_png_interface_1">
+<code class="sig-name descname">test_get_tile_png_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_get_tile_png_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>get_tile_png</cite> takes int as input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_get_tile_png_interface_2">
+<code class="sig-name descname">test_get_tile_png_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_get_tile_png_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>get_tile_png</cite> fails nicely if input is not int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_insert_msg_batch_interface_1">
+<code class="sig-name descname">test_insert_msg_batch_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_insert_msg_batch_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>insert_msg_batch</cite> takes an array of dictionaries as an input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_insert_msg_batch_interface_2">
+<code class="sig-name descname">test_insert_msg_batch_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_insert_msg_batch_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>insert_msg_batch</cite> fails nicely if input is not array</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_insert_msg_batch_interface_3">
+<code class="sig-name descname">test_insert_msg_batch_interface_3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_insert_msg_batch_interface_3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>insert_msg_batch</cite> fails nicely if contents of array aren’t all dictionaries</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_insert_msg_interface_1">
+<code class="sig-name descname">test_insert_msg_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_insert_msg_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>insert_msg</cite> takes a string as input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_insert_msg_interface_2">
+<code class="sig-name descname">test_insert_msg_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_insert_msg_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>insert_msg</cite> fails nicely if input is not a str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ports_from_name_interface_1">
+<code class="sig-name descname">test_read_all_ports_from_name_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ports_from_name_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ports_from_name</cite> takes only one input as a str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ports_from_name_interface_2">
+<code class="sig-name descname">test_read_all_ports_from_name_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ports_from_name_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ports_from_name</cite> takes two inputs, which are both type str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ports_from_name_interface_3">
+<code class="sig-name descname">test_read_all_ports_from_name_interface_3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ports_from_name_interface_3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ports_from_name</cite> fails nicely if first input is not str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ports_from_name_interface_4">
+<code class="sig-name descname">test_read_all_ports_from_name_interface_4</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ports_from_name_interface_4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ports_from_name</cite> fails nicely if first input is str, but second input is not str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_recent_ship_positions_interface_1">
+<code class="sig-name descname">test_read_all_recent_ship_positions_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_recent_ship_positions_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_recent_ship_positions</cite> exists</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_from_tile_interface_1">
+<code class="sig-name descname">test_read_all_ship_positions_from_tile_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_from_tile_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ship_positions_from_tile</cite> takes int as input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_from_tile_interface_2">
+<code class="sig-name descname">test_read_all_ship_positions_from_tile_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_from_tile_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ship_positions_from_tile</cite> fails nicely if input is not an int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_from_tile_scale3_interface_1">
+<code class="sig-name descname">test_read_all_ship_positions_from_tile_scale3_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_from_tile_scale3_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ship_positions_from_tile_scale3</cite> takes arguments port_name and country as type str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_from_tile_scale3_interface_2">
+<code class="sig-name descname">test_read_all_ship_positions_from_tile_scale3_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_from_tile_scale3_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ship_positions_from_tile_scale3</cite> fails nicely when either port_name or country is not type str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_to_port_interface_1">
+<code class="sig-name descname">test_read_all_ship_positions_to_port_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_to_port_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ship_positions_to_port</cite> takes argument mmsi as int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_to_port_interface_2">
+<code class="sig-name descname">test_read_all_ship_positions_to_port_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ship_positions_to_port_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ship_positions_to_port</cite> fails nicely if mmsi argument is not type int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ships_headed_to_port_interface_1">
+<code class="sig-name descname">test_read_all_ships_headed_to_port_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ships_headed_to_port_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ships_headed_to_port</cite> takes port_name and country as str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_all_ships_headed_to_port_interface_2">
+<code class="sig-name descname">test_read_all_ships_headed_to_port_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_all_ships_headed_to_port_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_all_ships_headed_to_port</cite> fails nicely if both arguments are not a type str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_last_5_ship_positions_from_mmsi_interface_1">
+<code class="sig-name descname">test_read_last_5_ship_positions_from_mmsi_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_last_5_ship_positions_from_mmsi_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_last_5_ship_positions_from_mmsi</cite> takes int as only input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_last_5_ship_positions_from_mmsi_interface_2">
+<code class="sig-name descname">test_read_last_5_ship_positions_from_mmsi_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_last_5_ship_positions_from_mmsi_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_last_5_ship_positions_from_mmsi</cite> fails nicely if input is not int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_ship_recent_position_from_mmsi_interface_1">
+<code class="sig-name descname">test_read_ship_recent_position_from_mmsi_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_ship_recent_position_from_mmsi_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_ship_recent_position_from_mmsi</cite> takes int as input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_ship_recent_position_from_mmsi_interface_2">
+<code class="sig-name descname">test_read_ship_recent_position_from_mmsi_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_ship_recent_position_from_mmsi_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_ship_recent_position_from_mmsi</cite> fails nicely if input is not int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_vessel_information_interface_1">
+<code class="sig-name descname">test_read_vessel_information_interface_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_vessel_information_interface_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_vessel_information</cite> takes int as the only input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_vessel_information_interface_2">
+<code class="sig-name descname">test_read_vessel_information_interface_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_vessel_information_interface_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_vessel_information</cite> takes mmsi as int, imo as int, name as str, and call_sign as str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_vessel_information_interface_3">
+<code class="sig-name descname">test_read_vessel_information_interface_3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_vessel_information_interface_3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_vessel_information</cite> fails nicely if mmsi is not an int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_vessel_information_interface_4">
+<code class="sig-name descname">test_read_vessel_information_interface_4</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_vessel_information_interface_4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_vessel_information</cite> fails nicely if imo is not an int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_Methods_UnitTest.test_read_vessel_information_interface_5">
+<code class="sig-name descname">test_read_vessel_information_interface_5</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_Methods_UnitTest.test_read_vessel_information_interface_5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>read_vessel_information</cite> fails nicely if call_sign is not str</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="testDAO.DAO_UnitTest">
+<em class="property">class </em><code class="sig-prename descclassname">testDAO.</code><code class="sig-name descname">DAO_UnitTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="py attribute">
+<dt id="testDAO.DAO_UnitTest.DAO">
+<code class="sig-name descname">DAO</code><em class="property">: <a class="reference internal" href="DataAccessObject.html#DataAccessObject.MySQL_DAO" title="DataAccessObject.MySQL_DAO">DataAccessObject.MySQL_DAO</a></em><em class="property"> = None</em><a class="headerlink" href="#testDAO.DAO_UnitTest.DAO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.setUpClass">
+<em class="property">classmethod </em><code class="sig-name descname">setUpClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up class fixture before running tests in the class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.tearDownClass">
+<em class="property">classmethod </em><code class="sig-name descname">tearDownClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.tearDownClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for deconstructing the class fixture after running all tests in the class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_delete_msgs_older_5min">
+<code class="sig-name descname">test_delete_msgs_older_5min</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_delete_msgs_older_5min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete msgs from the first 3 minutes (incrementally)
+Deletes msgs older than or equal to 2020-11-18 00:00:00,
+then older than or equal to 2020-11-18T00:00:01.000Z,
+then older than or equal to 2020-11-18 00:02:00,
+finally older than or equal to 2020-11-18T00:00:03.000Z.</p>
+<p>There are 4 assertions in here. I did not know how to make an incrementing test of this delete method
+using multiple methods.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_find_sub_map_tiles">
+<code class="sig-name descname">test_find_sub_map_tiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_find_sub_map_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>find_sub_map</cite> works by finding all of the sub tiles for tile_id=5531</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_get_tile_png">
+<code class="sig-name descname">test_get_tile_png</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_get_tile_png" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>get_tile_png</cite> works by querying png file from a tile_id and converting it to binary data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_insert_msg_1">
+<code class="sig-name descname">test_insert_msg_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_insert_msg_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>insert_msg</cite> works properly by inserting 1 position_report msg</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_insert_msg_2">
+<code class="sig-name descname">test_insert_msg_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_insert_msg_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>insert_msg</cite> works properly by inserting 1 static_data msg</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_insert_msg_batch_1">
+<code class="sig-name descname">test_insert_msg_batch_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_insert_msg_batch_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>insert_msg_batch</cite> works properly by inserting 9 msgs consisting of static_data and position_report</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_insert_msg_batch_2">
+<code class="sig-name descname">test_insert_msg_batch_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_insert_msg_batch_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>insert_msg_batch</cite> works properly by trying to insert 9 msgs consisting of static_data and position_report, but only 5 are valid to insert</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_all_ports_from_name">
+<code class="sig-name descname">test_read_all_ports_from_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_all_ports_from_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>read_all_ports_from_name</cite> works properly by querying all ports named ‘Nyborg’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_all_recent_ship_positions">
+<code class="sig-name descname">test_read_all_recent_ship_positions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_all_recent_ship_positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>read_all_recent_ship_positions</cite> works properly and retrieves all most recent ship positions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_all_ship_positions_from_tile">
+<code class="sig-name descname">test_read_all_ship_positions_from_tile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_all_ship_positions_from_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>read_all_ship_positions_from_tile</cite> works properly when searching for ships in tile_id=51351</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_all_ship_positions_from_tile_scale3">
+<code class="sig-name descname">test_read_all_ship_positions_from_tile_scale3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_all_ship_positions_from_tile_scale3" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Unimplemented integration test</strong>
+The test asserts True since function <cite>read_all_ship_positions_from_tile_scale3</cite> is not implemented with the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_all_ship_positions_to_port">
+<code class="sig-name descname">test_read_all_ship_positions_to_port</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_all_ship_positions_to_port" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Unimplemented integration test</strong>
+The test asserts True since function <cite>read_all_ship_positions_to_port</cite> is not implemented with the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_all_ships_headed_to_port">
+<code class="sig-name descname">test_read_all_ships_headed_to_port</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_all_ships_headed_to_port" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Unimplemented integration test</strong>
+The test asserts True since function <cite>read_all_ships_headed_to_port</cite> is not implemented with the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_last_5_ship_positions_from_mmsi">
+<code class="sig-name descname">test_read_last_5_ship_positions_from_mmsi</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_last_5_ship_positions_from_mmsi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>read_last_5_ship_positions_from_mmsi</cite> works by reading the last 5 positions for vessel with an MMSI of230631000</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_vessel_information_1">
+<code class="sig-name descname">test_read_vessel_information_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_vessel_information_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>read_vessel_information</cite> works by reading the vessel document with mmsi of 230631000</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_vessel_information_2">
+<code class="sig-name descname">test_read_vessel_information_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_vessel_information_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>read_vessel_information</cite> works by reading vessel document with mmsi of 319904000 and name of ‘Montkaj’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_vessel_information_3">
+<code class="sig-name descname">test_read_vessel_information_3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_vessel_information_3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>read_vessel_information</cite> works by reading vessel document with mmsi of 440007100, name of ‘Pesquera Hernan Cortes’ and call sign of ‘6287207’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_read_vessel_information_4">
+<code class="sig-name descname">test_read_vessel_information_4</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_read_vessel_information_4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>read_vessel_information</cite> works by reading vessel document with mmsi of 440007100, imo of 5275569 and call sign of ‘6287207’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.DAO_UnitTest.test_ship_recent_position_from_mmsi">
+<code class="sig-name descname">test_ship_recent_position_from_mmsi</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.DAO_UnitTest.test_ship_recent_position_from_mmsi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function <cite>read_last_5_ship_positions_from_mmsi</cite> works by reading the most recent position for the vessel with an MMSI of 230631000</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="testDAO.Encoder_UnitTest">
+<em class="property">class </em><code class="sig-prename descclassname">testDAO.</code><code class="sig-name descname">Encoder_UnitTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.setUpClass">
+<em class="property">classmethod </em><code class="sig-name descname">setUpClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up class fixture before running tests in the class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.tearDownClass">
+<em class="property">classmethod </em><code class="sig-name descname">tearDownClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.tearDownClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for deconstructing the class fixture after running all tests in the class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_decode_1">
+<code class="sig-name descname">test_decode_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_decode_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>decode</cite> works properly when given a str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_decode_2">
+<code class="sig-name descname">test_decode_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_decode_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>decode</cite> works properly when given a str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_encode_1">
+<code class="sig-name descname">test_encode_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_encode_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>encode</cite> works properly when given a kwarg</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_encode_2">
+<code class="sig-name descname">test_encode_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_encode_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <cite>encode</cite> works properly when given a kwarg</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_extract_message_1">
+<code class="sig-name descname">test_extract_message_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_extract_message_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function ‘extract_message` works properly when given postion_report</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_extract_message_2">
+<code class="sig-name descname">test_extract_message_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_extract_message_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function ‘extract_message` works properly when given static_data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_extract_message_position_1">
+<code class="sig-name descname">test_extract_message_position_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_extract_message_position_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function ‘extract_message_position` works properly when given a position_report</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_extract_message_position_2">
+<code class="sig-name descname">test_extract_message_position_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_extract_message_position_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function ‘extract_message_position` works properly when given a position_report</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_extract_message_static_1">
+<code class="sig-name descname">test_extract_message_static_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_extract_message_static_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function ‘extract_message_static` works properly when given static_data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_extract_message_static_2">
+<code class="sig-name descname">test_extract_message_static_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_extract_message_static_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function ‘extract_message_static` works properly when given static_data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_extract_timestamp_1">
+<code class="sig-name descname">test_extract_timestamp_1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_extract_timestamp_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function ‘extract_timestamp` works properly when given a python formatted timestamp</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="testDAO.Encoder_UnitTest.test_extract_timestamp_2">
+<code class="sig-name descname">test_extract_timestamp_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#testDAO.Encoder_UnitTest.test_extract_timestamp_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function ‘extract_timestamp` works properly when given a python formatted timestamp</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dependencies.html" class="btn btn-neutral float-right" title="dependencies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="DataAccessObject.html" class="btn btn-neutral float-left" title="DataAccessObject module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Hunter Durbin, Noah Connolly, Cam Tharp
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

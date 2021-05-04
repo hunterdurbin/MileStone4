@@ -1,0 +1,7 @@
+mysqlBuilder module
+===================
+
+.. automodule:: mysqlBuilder
+   :members:
+   :undoc-members:
+   :show-inheritance:
