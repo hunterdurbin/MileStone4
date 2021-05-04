@@ -22,7 +22,7 @@
    
     >$ mysql -u \<user> -p --password=\<password> < AISTestDataCreateTables.mysql
 
-    2. Populating the database:<br/>
+    2. Populating the database:
     Download the 'AISTestData_dump.mysql' (not found in this repository), and move it to the 'data/sql' directory.
     Or just download and move to the directory wherever you saved the file, and then run the following command in powershell or bash.
    **Windows**
