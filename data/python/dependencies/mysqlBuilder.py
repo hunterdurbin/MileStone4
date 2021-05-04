@@ -1,6 +1,5 @@
 
 
-# TODO: make test method
 def insert_ais_message_tuple_builder(msg_content: dict):
     keys = ""
     values = ""
@@ -22,7 +21,6 @@ def insert_ais_message_tuple_builder(msg_content: dict):
     return keys, values
 
 
-# TODO: make test method
 def insert_position_report_tuple_builder(msg_content: dict):
     keys = ""
     values = ""

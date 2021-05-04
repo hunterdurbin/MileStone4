@@ -4,8 +4,6 @@ from dependencies.mysqlBuilder import *
 import json, os, datetime
 
 
-#NoahConn Test Push
-
 class MySQL_DAO:
 
     def __init__(self, stub=False):
@@ -22,14 +20,10 @@ class MySQL_DAO:
         """
 
         if type(batch) != list:
-            if not self.is_stub:
-                print('Expected \'batch\' to be a list.')
             return -1
 
         for _dict in batch:
             if type(_dict) != dict:
-                if not self.is_stub:
-                    print('Expected every value in list \'batch\' to be of type \'dict\'.')
                 return -1
 
         if self.is_stub:
@@ -88,8 +82,6 @@ class MySQL_DAO:
         try:
             msg_content = extract_message(json_data)
         except Exception as e:
-            if not self.is_stub:
-                print(e)
             return -1
 
         if self.is_stub:
@@ -126,7 +118,6 @@ class MySQL_DAO:
                     cursor.execute(query_static_data)
                 con.commit()
         except Exception as e:
-            print(e)
             return json.dumps(0)
         return json.dumps(1)
 
@@ -341,11 +332,11 @@ class MySQL_DAO:
         AND (MapView1_Id={0} OR MapView2_Id={0} OR MapView3_Id={0})
         GROUP BY MMSI;
         
-        select ais_message.mmsi, position_report.latitude, position_report.longitude 
-        from recent_vessels, ais_message, position_report 
-        where recent_vessels.mmsi=ais_message.mmsi 
-        and recent_vessels.timestamp=ais_message.timestamp 
-        and ais_message.id=position_report.aismessage_id ;
+        SELECT AIS_MESSAGE.MMSI, POSITION_REPORT.Latitude, POSITION_REPORT.Longitude 
+        FROM RECENT_VESSELS, AIS_MESSAGE, POSITION_REPORT 
+        WHERE RECENT_VESSELS.MMSI=AIS_MESSAGE.MMSI 
+        AND RECENT_VESSELS.Timestamp=AIS_MESSAGE.Timestamp 
+        AND AIS_MESSAGE.Id=POSITION_REPORT.AISMessage_Id ;
         """.format(tile_id)
 
         ships = None
@@ -381,9 +372,9 @@ class MySQL_DAO:
         optional_args = f" AND Country=\"{country}\"{optional_args}" if country is not None else optional_args
 
         query = """
-        select Id, Name, Country, Latitude, Longitude, MapView1_Id, MapView2_Id, MapView3_Id 
-        from PORT 
-        where Name=\"{}\" 
+        SELECT Id, Name, Country, Latitude, Longitude, MapView1_Id, MapView2_Id, MapView3_Id 
+        FROM PORT 
+        WHERE Name=\"{}\" 
         {}
         """.format(port_name, optional_args)
 
@@ -405,6 +396,8 @@ class MySQL_DAO:
 
     def read_all_ship_positions_from_tile_scale3(self, port_name: str, country: str):
         """
+        **Unfinished Implementation**. **Interface test are created and pass**
+
         Read all ship positions in the tile of scale 3 containing the given port.
 
         :param port_name: (str) - name of the port a ship is heading to
@@ -413,11 +406,11 @@ class MySQL_DAO:
                     Otherwise: an Array of Port documents.
         :return type: json
         """
+        if type(port_name) != str or type(country) != str:
+            return -1
 
         if self.is_stub:
-            if type(port_name) == str and type(country) == str:
-                return 1
-            return -1
+            return 1
 
         pass
 
@@ -458,22 +451,26 @@ class MySQL_DAO:
 
     def read_all_ship_positions_to_port(self, port_id: int):
         """
+        **Unfinished Implementation**. **Interface test are created and pass**
+
         Read most recent positions of ships headed to port with given Id
 
         :param port_id: (int) - the port id of a desired port
         :return: Array of position documents of the form {"MMSI": ..., "lat": ..., "long": ..., "IMO": ...}.
         :return type: json
         """
+        if type(port_id) != int:
+            return -1
 
         if self.is_stub:
-            if type(port_id) == int:
-                return 1
-            return -1
+            return 1
 
         pass
 
     def read_all_ships_headed_to_port(self, port_name: str, country: str):
         """
+        **Unfinished Implementation**. **Interface test are created and pass**
+
         Read all positions of ships headed to given port (as read from static data, or user input).
 
         :param port_name: (str) - name of a port
@@ -483,13 +480,11 @@ class MySQL_DAO:
                     Otherwise: an Array of Port documents.
         :return type: json
         """
-
-        if self.is_stub:
-            if type(port_name) == str and type(country) == str:
-                return 1
+        if type(port_name) != str or type(country) != str:
             return -1
 
-
+        if self.is_stub:
+            return 1
 
         pass
 

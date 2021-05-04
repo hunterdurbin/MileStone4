@@ -1,7 +1,7 @@
 import unittest
 from DataAccessObject import MySQL_DAO
 from dependencies.Encoder import *
-import dependencies.dbTestSetup
+from dependencies.dbTestSetup import setUp
 import json
 
 
@@ -213,9 +213,19 @@ class DAO_Methods_UnitTest(unittest.TestCase):
         result = self.DAO.read_all_ports_from_name('PRT', 123)
         self.assertEqual(-1, result)
 
-    def test_read_all_ship_positions_from_tile_scale3_interface___(self):
+    def test_read_all_ship_positions_from_tile_scale3_interface_1(self):
+        """
+        Function `read_all_ship_positions_from_tile_scale3` takes arguments port_name and country as type str
+        """
         result = self.DAO.read_all_ship_positions_from_tile_scale3('PRT', 'USA')
         self.assertEqual(1, result)
+
+    def test_read_all_ship_positions_from_tile_scale3_interface_2(self):
+        """
+        Function `read_all_ship_positions_from_tile_scale3` fails nicely when either port_name or country is not type str
+        """
+        result = self.DAO.read_all_ship_positions_from_tile_scale3('PRT', 432)
+        self.assertEqual(-1, result)
 
     def test_read_last_5_ship_positions_from_mmsi_interface_1(self):
         """
@@ -231,13 +241,33 @@ class DAO_Methods_UnitTest(unittest.TestCase):
         result = self.DAO.read_last_5_ship_positions_from_mmsi('123456789')
         self.assertEqual(-1, result)
 
-    def test_read_all_ship_positions_to_port_interface(self):
+    def test_read_all_ship_positions_to_port_interface_1(self):
+        """
+        Function `read_all_ship_positions_to_port` takes argument mmsi as int
+        """
         result = self.DAO.read_all_ship_positions_to_port(412)
         self.assertEqual(1, result)
 
-    def test_read_all_ships_headed_to_port_interface____(self):
+    def test_read_all_ship_positions_to_port_interface_2(self):
+        """
+        Function `read_all_ship_positions_to_port` fails nicely if mmsi argument is not type int
+        """
+        result = self.DAO.read_all_ship_positions_to_port('412')
+        self.assertEqual(-1, result)
+
+    def test_read_all_ships_headed_to_port_interface_1(self):
+        """
+        Function `read_all_ships_headed_to_port` takes port_name and country as str
+        """
         result = self.DAO.read_all_ships_headed_to_port('PRT', 'USA')
         self.assertEqual(1, result)
+
+    def test_read_all_ships_headed_to_port_interface_2(self):
+        """
+        Function `read_all_ships_headed_to_port` fails nicely if both arguments are not a type str
+        """
+        result = self.DAO.read_all_ships_headed_to_port('PRT', 1)
+        self.assertEqual(-1, result)
 
     def test_find_sub_map_tiles_interface_1(self):
         """
@@ -273,6 +303,7 @@ class DAO_UnitTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        setUp()  # setup the test database
         DAO_UnitTest.DAO = MySQL_DAO()
 
     @classmethod
@@ -396,8 +427,12 @@ class DAO_UnitTest(unittest.TestCase):
         pass
 
     def test_read_all_recent_ship_positions(self):
-        actual = self.DAO.read_all_recent_ship_positions()
-        pass
+        """
+        Test function `read_all_recent_ship_positions` works properly and retrieves all most recent ship positions
+        """
+        actual_amount = len(json.loads(self.DAO.read_all_recent_ship_positions()))
+        expected_amount_of_positions = 2153
+        self.assertEqual(expected_amount_of_positions, actual_amount)
 
     def test_read_last_5_ship_positions_from_mmsi(self):
         """
@@ -432,11 +467,29 @@ class DAO_UnitTest(unittest.TestCase):
         )
         self.assertEqual(expected, actual)
 
+    def test_read_all_ship_positions_from_tile_scale3(self):
+        """
+        **Unimplemented integration test**
+        The test asserts True since function `read_all_ship_positions_from_tile_scale3` is not implemented with the database
+        """
+        self.DAO.read_all_ship_positions_from_tile_scale3('PORT', 'USA')
+        self.assertTrue(True)
+
     def test_read_all_ship_positions_to_port(self):
-        pass
+        """
+        **Unimplemented integration test**
+        The test asserts True since function `read_all_ship_positions_to_port` is not implemented with the database
+        """
+        self.DAO.read_all_ship_positions_to_port(347)
+        self.assertTrue(True)
 
     def test_read_all_ships_headed_to_port(self):
-        pass
+        """
+        **Unimplemented integration test**
+        The test asserts True since function `read_all_ships_headed_to_port` is not implemented with the database
+        """
+        self.DAO.read_all_ships_headed_to_port('PORT', 'USA')
+        self.assertTrue(True)
 
     def test_read_all_ports_from_name(self):
         """
@@ -467,9 +520,12 @@ class DAO_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_read_all_ship_positions_from_tile(self):
-        actual = self.DAO.read_all_ship_positions_from_tile(51351)
-        # print(actual)
-        pass
+        """
+        Test function `read_all_ship_positions_from_tile` works properly when searching for ships in tile_id=51351
+        """
+        actual = len(json.loads(self.DAO.read_all_ship_positions_from_tile(51351)))
+        expected = 77
+        self.assertEqual(expected, actual)
 
     def test_read_vessel_information_1(self):
         """
@@ -519,7 +575,6 @@ class DAO_UnitTest(unittest.TestCase):
         Test function `read_vessel_information` works by reading vessel document with mmsi of 440007100, name of 'Pesquera Hernan Cortes' and call sign of '6287207'.
         """
         actual = self.DAO.read_vessel_information(440007100, name="Pesquera Hernan Cortes", call_sign="6287207")
-        print(actual)
         expected = json.dumps(
             {"IMO": 5275569,
              "Flag": "Spain",
@@ -609,6 +664,9 @@ class Encoder_UnitTest(unittest.TestCase):
         pass
 
     def test_encode_1(self):
+        """
+        Function `encode` works properly when given a kwarg
+        """
         actual = encode(MMSI=123456789, Positions=[])
         expected = json.dumps(
             {
@@ -620,6 +678,9 @@ class Encoder_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_encode_2(self):
+        """
+        Function `encode` works properly when given a kwarg
+        """
         actual = encode(MMSI=123456789, Positions=[{'lat': 42.412, 'long': 49.124}])
         expected = json.dumps(
             {
@@ -631,11 +692,17 @@ class Encoder_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_decode_1(self):
+        """
+        Function `decode` works properly when given a str
+        """
         actual = decode('{"Hunter": [6, 5, 14, 125]}')
         expected = json.loads('{"Hunter": [6, 5, 14, 125]}')
         self.assertEqual(expected, actual)
 
     def test_decode_2(self):
+        """
+        Function `decode` works properly when given a str
+        """
         actual = decode('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":304858000,"MsgType":'
                         '"position_report","Position":{"type":"Point","coordinates":[55.218332,13.371672]},'
                         '"Status":"Under way using engine","SoG":10.8,"CoG":94.3,"Heading":97}')
@@ -645,16 +712,25 @@ class Encoder_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_extract_timestamp_1(self):
+        """
+        Function 'extract_timestamp` works properly when given a python formatted timestamp
+        """
         actual = extract_timestamp("2020-11-18T00:00:00.000Z")
         expected = "2020-11-18 00:00:00"
         self.assertEqual(expected, actual)
 
     def test_extract_timestamp_2(self):
+        """
+        Function 'extract_timestamp` works properly when given a python formatted timestamp
+        """
         actual = extract_timestamp("2020-11-18T00:00:01.000Z")
         expected = "2020-11-18 00:00:01"
         self.assertEqual(expected, actual)
 
     def test_extract_message_position_1(self):
+        """
+        Function 'extract_message_position` works properly when given a position_report
+        """
         actual = extract_message_position(
             {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 249579000,
              "MsgType": "position_report",
@@ -667,6 +743,9 @@ class Encoder_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_extract_message_position_2(self):
+        """
+        Function 'extract_message_position` works properly when given a position_report
+        """
         actual = extract_message_position(
             {"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 257961000,
              "MsgType": "position_report", "Position":
@@ -680,6 +759,9 @@ class Encoder_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_extract_message_static_1(self):
+        """
+        Function 'extract_message_static` works properly when given static_data
+        """
         actual = extract_message_static({"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 219023635,
                                          "MsgType": "static_data", "IMO": "Unknown", "CallSign": "OX3103",
                                          "Name": "SKJOLD R",
@@ -693,6 +775,9 @@ class Encoder_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_extract_message_static_2(self):
+        """
+        Function 'extract_message_static` works properly when given static_data
+        """
         actual = extract_message_static({"Timestamp": "2020-11-18T00:00:00.000Z", "Class": "Class A", "MMSI": 265011000,
                                          "MsgType": "static_data", "IMO": 8616087, "CallSign": "SBEN", "Name": "SOFIA",
                                          "VesselType": "Cargo", "Length": 72, "Breadth": 11, "Draught": 3.7,
@@ -705,6 +790,9 @@ class Encoder_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_extract_message_1(self):
+        """
+        Function 'extract_message` works properly when given postion_report
+        """
         actual = extract_message('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":257961000,'
                                  '"MsgType":"position_report","Position":'
                                  '{"type":"Point","coordinates":[55.00316,12.809015]},'
@@ -716,6 +804,9 @@ class Encoder_UnitTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_extract_message_2(self):
+        """
+        Function 'extract_message` works properly when given static_data
+        """
         actual = extract_message('{"Timestamp":"2020-11-18T00:00:00.000Z","Class":"Class A","MMSI":265011000,'
                                  '"MsgType":"static_data","IMO":8616087,"CallSign":"SBEN","Name":"SOFIA",'
                                  '"VesselType":"Cargo","Length":72,"Breadth":11,"Draught":3.7,'
