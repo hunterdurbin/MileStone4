@@ -24,7 +24,7 @@ def decode(json_doc):
     """
     Decode a document into a python dictionary
 
-    :param json_doc:
+    :param json_doc: (str) - a string format of a json document
     :returns: python dictionary
     :return type: dict
     """
@@ -62,7 +62,7 @@ def extract_message_position(pos_report: dict):
     'Status: ..., 'RoT': ..., 'SoG': ..., 'CoG': ..., 'Heading': ...}
     If a key is not present in the pos_report, the key-value will not be returned in the resulting dict.
 
-    :param pos_report:
+    :param pos_report: (dict) - position report dictionary
     :returns: parsed position report dictionary
     :return type: dict
     """
@@ -102,10 +102,10 @@ def extract_message_static(static_report: dict):
     The format will be that of:
     {'MMSI': ..., 'IMO': ..., 'Timestamp': ..., 'Class': ..., 'CallSign': ...,
     'Name': ..., 'VesselType': ..., 'CargoType': ..., 'Length': ..., 'Breadth': ...,
-     'Destination': ..., 'ETA': ...}
-     If a key is not present in the pos_report, the key-value will not be returned in the resulting dict.
+    'Destination': ..., 'ETA': ...}
+    If a key is not present in the pos_report, the key-value will not be returned in the resulting dict.
 
-    :param static_report:
+    :param static_report: (dict) - static data dictionary
     :returns: parsed static data report dictionary
     :return type: dict
     """
@@ -146,6 +146,9 @@ def extract_message_static(static_report: dict):
 
 
 def default(o):
+    """
+    Helper method used for json.dumps function
+    """
     if isinstance(o, Decimal):
         return str(o)
     raise TypeError("Object of type {} is not JSON serializable".format(type(o).__name__))

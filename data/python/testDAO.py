@@ -1,7 +1,6 @@
 import unittest
 from DataAccessObject import MySQL_DAO
 from dependencies.Encoder import *
-from dependencies.dbTestSetup import setUp
 import json
 
 
@@ -303,7 +302,6 @@ class DAO_UnitTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        setUp()  # setup the test database
         DAO_UnitTest.DAO = MySQL_DAO()
 
     @classmethod
