@@ -70,4 +70,4 @@ Integreation tests for these functions are created but assert True.
 
 ## Additional Documentation 
 
-You can find more detailed descriptions of the functions and their docstrings [here]().
+You can find more detailed descriptions of the functions and their docstrings [here](https://github.com/hunterdurbin/MileStone4/tree/main/data/html).
